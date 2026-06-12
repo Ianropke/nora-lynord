@@ -1,0 +1,232 @@
+@import "tailwindcss";
+
+/* ── Pokémon Design Tokens ── */
+:root {
+  --poke-red: #E3350D;
+  --poke-red-dark: #B91C1C;
+  --poke-blue: #2563EB;
+  --poke-blue-dark: #1E3A5F;
+  --poke-yellow: #FACC15;
+  --poke-yellow-glow: #FDE68A;
+  --poke-white: #F8F8F8;
+  --poke-dark: #1a1a2e;
+  --poke-darker: #0f0f1e;
+}
+
+/* ── Global Styles ── */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Nunito', sans-serif;
+}
+
+body {
+  background: linear-gradient(170deg, var(--poke-darker) 0%, var(--poke-dark) 40%, #16213e 100%);
+  color: #fff;
+}
+
+#root {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Scrollbar ── */
+#root::-webkit-scrollbar { width: 6px; }
+#root::-webkit-scrollbar-track { background: transparent; }
+#root::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+
+/* ── Animations ── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(250, 204, 21, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(250, 204, 21, 0.7); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-6px); }
+  80% { transform: translateX(6px); }
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slide-up {
+  0% { transform: translateY(40px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes bounce-star {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+@keyframes mic-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+  70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+@keyframes pokeball-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes catch-bounce {
+  0% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(0.9) rotate(-15deg); }
+  50% { transform: scale(1.1) rotate(10deg); }
+  75% { transform: scale(0.95) rotate(-5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes electric-glow {
+  0%, 100% { text-shadow: 0 0 10px rgba(250,204,21,0.5); }
+  50% { text-shadow: 0 0 30px rgba(250,204,21,0.9), 0 0 60px rgba(250,204,21,0.3); }
+}
+
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-shake { animation: shake 0.5s ease-in-out; }
+.animate-pop-in { animation: pop-in 0.4s ease-out forwards; }
+.animate-slide-up { animation: slide-up 0.5s ease-out forwards; }
+.animate-bounce-star { animation: bounce-star 0.6s ease-in-out; }
+.animate-mic-pulse { animation: mic-pulse 1.5s ease-out infinite; }
+.animate-pokeball-spin { animation: pokeball-spin 1s ease-in-out; }
+.animate-catch-bounce { animation: catch-bounce 0.6s ease-in-out; }
+.animate-electric-glow { animation: electric-glow 2s ease-in-out infinite; }
+
+/* ── Glassmorphism with Pokémon tint ── */
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ── Pokémon Type Colors for World Cards ── */
+.world-1  { background: linear-gradient(135deg, #A8A77A, #8D8D6A); } /* Normal */
+.world-2  { background: linear-gradient(135deg, #7AC74C, #5A9A32); } /* Grass */
+.world-3  { background: linear-gradient(135deg, #B6A136, #96811A); } /* Rock */
+.world-4  { background: linear-gradient(135deg, #6390F0, #4070D0); } /* Water */
+.world-5  { background: linear-gradient(135deg, #F7D02C, #D4B020); } /* Electric */
+.world-6  { background: linear-gradient(135deg, #D685AD, #C4608E); } /* Fairy */
+.world-7  { background: linear-gradient(135deg, #E2BF65, #C9A645); } /* Ground */
+.world-8  { background: linear-gradient(135deg, #F95587, #D83060); } /* Psychic */
+.world-9  { background: linear-gradient(135deg, #EE8130, #D06818); } /* Fire */
+.world-10 { background: linear-gradient(135deg, #6F35FC, #5520D0); } /* Dragon */
+.world-11 { background: linear-gradient(135deg, #C22E28, #A01E18); } /* Fighting */
+.world-12 { background: linear-gradient(135deg, #FFCB05, #E0B000); box-shadow: 0 4px 20px rgba(255,203,5,0.3); } /* Master/Champion */
+
+/* ── Pokéball Decorative Element ── */
+.pokeball-bg {
+  position: relative;
+  overflow: hidden;
+}
+.pokeball-bg::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 6px solid rgba(255,255,255,0.08);
+  pointer-events: none;
+}
+.pokeball-bg::after {
+  content: '';
+  position: absolute;
+  top: calc(-30% + 54px);
+  right: -20%;
+  width: 120px;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  pointer-events: none;
+}
+
+/* ── Badge Counter ── */
+.badge-counter {
+  background: linear-gradient(135deg, var(--poke-yellow), #F59E0B);
+  color: #1a1a2e;
+}
+
+/* ── Touch-friendly button base ── */
+.btn-touch {
+  min-height: 52px;
+  min-width: 52px;
+  touch-action: manipulation;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn-touch:active {
+  transform: scale(0.95);
+}
+
+/* ── Stagger delays for pop-in ── */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.10s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.20s; }
+.stagger-5 { animation-delay: 0.25s; }
+.stagger-6 { animation-delay: 0.30s; }
+.stagger-7 { animation-delay: 0.35s; }
+.stagger-8 { animation-delay: 0.40s; }
+.stagger-9 { animation-delay: 0.45s; }
+.stagger-10 { animation-delay: 0.50s; }
+.stagger-11 { animation-delay: 0.55s; }
+.stagger-12 { animation-delay: 0.60s; }
+
+/* ── Pokémon-style title gradient ── */
+.poke-title {
+  background: linear-gradient(135deg, var(--poke-yellow), #FDE68A, var(--poke-yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 4px rgba(250,204,21,0.3));
+}
+
+/* ── Red stripe header accent ── */
+.poke-header-stripe {
+  background: linear-gradient(90deg, var(--poke-red), var(--poke-red-dark));
+}
+
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .transform-style-preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}
