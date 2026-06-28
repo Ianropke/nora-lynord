@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Volume2, Trophy, Home } from "lucide-react";
+import { ArrowLeft, Volume2, Trophy, Home, Check } from "lucide-react";
 import confetti from "canvas-confetti";
 import type { World } from "../data/words";
 import { CorrectFeedback } from "./CorrectFeedback";
@@ -219,10 +219,10 @@ export function TrainGame({ world, onComplete, onBack }: TrainGameProps) {
             <div className="text-yellow-400 text-2xl mb-6">⭐⭐⭐</div>
             <div className="flex gap-3 justify-center">
               <button
-                onClick={onBack}
-                className="bg-sky-500 hover:bg-sky-600 active:scale-95 text-white rounded-2xl px-6 py-4 font-black text-lg flex items-center gap-2 transition shadow-lg"
+                onClick={() => onComplete(3)}
+                className="bg-green-500 hover:bg-green-600 active:scale-95 text-white rounded-2xl px-6 py-4 font-black text-lg flex items-center gap-2 transition shadow-lg"
               >
-                <Home className="w-6 h-6" /> Tilbage
+                <Check className="w-6 h-6" /> Fortsæt
               </button>
             </div>
           </motion.div>

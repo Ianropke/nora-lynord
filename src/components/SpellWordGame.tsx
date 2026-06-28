@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Volume2, Trophy, Home } from "lucide-react";
+import { ArrowLeft, Volume2, Trophy, Home, Check } from "lucide-react";
 import confetti from "canvas-confetti";
 import type { World } from "../data/words";
 import { CorrectFeedback } from "./CorrectFeedback";
@@ -21,6 +21,27 @@ export function SpellWordGame({ world, onComplete, onBack }: SpellWordGameProps)
 
   const currentWordObj = world.words[currentWordIndex];
   const currentWord = currentWordObj?.text || "";
+
+  const isLongWord = currentWord.length > 8;
+  const isVeryLongWord = currentWord.length > 10;
+
+  const slotSizeClass = isVeryLongWord
+    ? "w-10 h-10 text-xl"
+    : isLongWord
+    ? "w-12 h-12 text-2xl"
+    : "w-14 h-14 text-3xl";
+
+  const keySizeClass = isVeryLongWord
+    ? "w-11 h-11 text-xl"
+    : isLongWord
+    ? "w-13 h-13 text-2xl"
+    : "w-16 h-16 text-3xl";
+
+  const containerPaddingClass = isVeryLongWord
+    ? "p-2 border-4 gap-1.5 min-h-[70px]"
+    : isLongWord
+    ? "p-3 border-4 gap-2 min-h-[80px]"
+    : "p-4 border-8 gap-2 min-h-[90px]";
 
   const [selectedLetters, setSelectedLetters] = useState<{ id: string; char: string }[]>([]);
   const [availableLetters, setAvailableLetters] = useState<{ id: string; char: string }[]>([]);
@@ -132,7 +153,7 @@ export function SpellWordGame({ world, onComplete, onBack }: SpellWordGameProps)
             transition={{ duration: 0.4 }}
             className="w-full max-w-md"
           >
-            <div className="bg-cyan-100 rounded-xl p-4 border-8 border-gray-800 shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] relative min-h-[90px] flex items-center justify-center gap-2 flex-wrap">
+            <div className={`bg-cyan-100 rounded-xl ${containerPaddingClass} border-gray-800 shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] relative flex items-center justify-center flex-wrap`}>
               {/* Pokédex indicator lights */}
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-14 h-2 bg-red-500 rounded-full shadow-md" />
               <div className="absolute -bottom-5 left-4 w-4 h-4 bg-red-500 rounded-full border-2 border-gray-800" />
@@ -145,7 +166,7 @@ export function SpellWordGame({ world, onComplete, onBack }: SpellWordGameProps)
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   onClick={() => handleDeselectLetter(letter)}
-                  className="w-14 h-14 bg-white text-red-700 rounded-xl shadow-lg flex items-center justify-center text-3xl font-black uppercase hover:scale-105 active:scale-90 border-2 border-gray-300"
+                  className={`${slotSizeClass} bg-white text-red-700 rounded-xl shadow-lg flex items-center justify-center font-black uppercase hover:scale-105 active:scale-90 border-2 border-gray-300`}
                 >
                   {letter.char}
                 </motion.button>
@@ -153,16 +174,16 @@ export function SpellWordGame({ world, onComplete, onBack }: SpellWordGameProps)
               {[...Array(emptySlots)].map((_, i) => (
                 <div
                   key={`slot-${i}`}
-                  className="w-14 h-14 border-3 border-dashed border-gray-400 rounded-xl flex items-center justify-center bg-white/50"
+                  className={`${slotSizeClass} border-3 border-dashed border-gray-400 rounded-xl flex items-center justify-center bg-white/50`}
                 >
-                  <span className="text-gray-400 text-xl">_</span>
+                  <span className="text-gray-400">_</span>
                 </div>
               ))}
             </div>
           </motion.div>
 
           {/* Available letters */}
-          <div className="flex gap-3 flex-wrap justify-center max-w-md w-full mt-4">
+          <div className="flex gap-2 sm:gap-3 flex-wrap justify-center max-w-md w-full mt-4">
             {availableLetters.map(letter => (
               <motion.button
                 key={`avail-${letter.id}`}
@@ -170,7 +191,7 @@ export function SpellWordGame({ world, onComplete, onBack }: SpellWordGameProps)
                 animate={{ scale: 1, rotate: 0 }}
                 whileTap={{ scale: 0.85 }}
                 onClick={() => handleSelectLetter(letter)}
-                className="w-16 h-16 bg-red-500 border-b-4 border-red-800 text-white rounded-2xl shadow-md flex items-center justify-center text-3xl font-black uppercase hover:brightness-110 active:translate-y-1 active:border-b-0 transition-all"
+                className={`${keySizeClass} bg-red-500 border-b-4 border-red-800 text-white rounded-2xl shadow-md flex items-center justify-center font-black uppercase hover:brightness-110 active:translate-y-1 active:border-b-0 transition-all`}
               >
                 {letter.char}
               </motion.button>
@@ -194,10 +215,10 @@ export function SpellWordGame({ world, onComplete, onBack }: SpellWordGameProps)
             <div className="text-yellow-400 text-2xl mb-6">⭐⭐⭐</div>
             <div className="flex gap-3 justify-center">
               <button
-                onClick={onBack}
-                className="bg-red-500 hover:bg-red-600 active:scale-95 text-white rounded-2xl px-6 py-4 font-black text-lg flex items-center gap-2 transition shadow-lg"
+                onClick={() => onComplete(3)}
+                className="bg-green-500 hover:bg-green-600 active:scale-95 text-white rounded-2xl px-6 py-4 font-black text-lg flex items-center gap-2 transition shadow-lg"
               >
-                <Home className="w-6 h-6" /> Tilbage
+                <Check className="w-6 h-6" /> Fortsæt
               </button>
             </div>
           </motion.div>

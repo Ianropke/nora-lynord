@@ -12,15 +12,6 @@ describe('New Mini Games Test Suite', () => {
     cleanup();
   });
 
-  it('Renders Balloon-pop Game', async () => {
-    render(<App />);
-    fireEvent.click(screen.getByText('Pallet Town'));
-    fireEvent.click(screen.getByText('Ballon-pop'));
-    
-    // Verify the Drifloon-themed instruction renders
-    expect(await screen.findByText(/Pop den rigtige Drifloon/)).toBeInTheDocument();
-  });
-
   it('Renders Stav Ordet Game', async () => {
     render(<App />);
     fireEvent.click(screen.getByText('Pallet Town'));
@@ -30,15 +21,6 @@ describe('New Mini Games Test Suite', () => {
     await waitFor(() => {
       expect(screen.getAllByText('_').length).toBeGreaterThan(0);
     });
-  });
-
-  it('Renders Fiskedam Game', async () => {
-    render(<App />);
-    fireEvent.click(screen.getByText('Pallet Town'));
-    fireEvent.click(screen.getByText('Fiskedam'));
-    
-    // Verify the Magikarp-themed instruction renders
-    expect(await screen.findByText(/Fang Magikarp/)).toBeInTheDocument();
   });
 
   it('Renders Ord-Toget Game', async () => {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { ArrowLeft, RefreshCw, Trophy, Home } from "lucide-react";
+import { ArrowLeft, RefreshCw, Trophy, Home, Check } from "lucide-react";
 import confetti from "canvas-confetti";
 import { playWord } from "../hooks/useAudio";
 import type { World } from "../data/words";
@@ -124,9 +124,9 @@ export function MemoryGame({ world, onBack, addStars, completeWorld }: MemoryGam
             </button>
             <button
               onClick={onBack}
-              className="btn-touch bg-white text-gray-900 rounded-2xl px-6 py-3 font-bold flex items-center gap-2"
+              className="btn-touch bg-gradient-to-r from-green-500 to-emerald-400 text-white rounded-2xl px-6 py-3 font-bold flex items-center gap-2 shadow-lg hover:brightness-110 active:scale-95 transition-all"
             >
-              <Home className="w-5 h-5" /> Hjem
+              <Check className="w-5 h-5" /> Fortsæt
             </button>
           </div>
         </div>

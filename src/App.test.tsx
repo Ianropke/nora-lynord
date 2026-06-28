@@ -141,7 +141,7 @@ describe('Nora Lynord App Test Suite', () => {
     expect(screen.getByText(/Alle 10 ord fanget!/)).toBeInTheDocument();
     
     // Complete the world to get back
-    fireEvent.click(screen.getByText('Hjem'));
+    fireEvent.click(screen.getByText('Fortsæt'));
     
     // Wait for World Menu Screen to appear
     expect(await screen.findByText('Rute 1 · Vælg en øvelse')).toBeInTheDocument();

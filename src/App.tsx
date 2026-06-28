@@ -36,9 +36,7 @@ import { playWord, stopAudio, preloadWords } from "./hooks/useAudio";
 
 import { TrophyCabinet } from "./components/TrophyCabinet";
 import { MemoryGame } from "./components/MemoryGame";
-import { BalloonPopGame } from "./components/BalloonPopGame";
 import { SpellWordGame } from "./components/SpellWordGame";
-import { FishingGame } from "./components/FishingGame";
 import { TrainGame } from "./components/TrainGame";
 
 
@@ -48,9 +46,7 @@ type Screen =
   | { type: "listen"; worldId: number }
   | { type: "find"; worldId: number }
   | { type: "memory"; worldId: number }
-  | { type: "balloon"; worldId: number }
   | { type: "spell"; worldId: number }
-  | { type: "fishing"; worldId: number }
   | { type: "train"; worldId: number }
   | { type: "trophy-cabinet" };
 
@@ -291,7 +287,7 @@ function WorldMenuScreen({
 }: {
   world: World;
   onBack: () => void;
-  onSelectMode: (mode: "listen" | "find" | "memory" | "balloon" | "spell" | "fishing" | "train") => void;
+  onSelectMode: (mode: "listen" | "find" | "memory" | "spell" | "train") => void;
 }) {
   const modes = [
     {
@@ -316,25 +312,11 @@ function WorldMenuScreen({
       gradient: "from-green-500 to-emerald-400",
     },
     {
-      key: "balloon" as const,
-      icon: Cloud,
-      title: "Ballon-pop",
-      desc: "Pop den rigtige ballon",
-      gradient: "from-sky-400 to-indigo-500",
-    },
-    {
       key: "spell" as const,
       icon: Type,
       title: "Stav Ordet",
       desc: "Byg ordet rigtigt",
       gradient: "from-indigo-500 to-purple-500",
-    },
-    {
-      key: "fishing" as const,
-      icon: Fish,
-      title: "Fiskedam",
-      desc: "Fang den rigtige fisk",
-      gradient: "from-cyan-400 to-blue-600",
     },
     {
       key: "train" as const,
@@ -621,9 +603,9 @@ function FindScreen({
           <div className="flex gap-3 justify-center">
             <button
               onClick={onBack}
-              className="btn-touch glass rounded-2xl px-5 py-3 font-bold flex items-center gap-2"
+              className="btn-touch bg-gradient-to-r from-green-500 to-emerald-400 text-white rounded-2xl px-6 py-3 font-bold flex items-center gap-2 shadow-lg hover:brightness-110 active:scale-95 transition-all"
             >
-              <Home className="w-5 h-5" /> Hjem
+              <Check className="w-5 h-5" /> Fortsæt
             </button>
             {!perfect && (
               <button
@@ -817,32 +799,8 @@ export default function App() {
           />
         )}
 
-        {screen.type === "balloon" && (
-          <BalloonPopGame
-            world={getWorld(screen.worldId)}
-            onBack={() => goWorldMenu(screen.worldId)}
-            onComplete={(stars) => {
-              addStars(stars);
-              completeWorld(screen.worldId);
-              goWorldMenu(screen.worldId);
-            }}
-          />
-        )}
-
         {screen.type === "spell" && (
           <SpellWordGame
-            world={getWorld(screen.worldId)}
-            onBack={() => goWorldMenu(screen.worldId)}
-            onComplete={(stars) => {
-              addStars(stars);
-              completeWorld(screen.worldId);
-              goWorldMenu(screen.worldId);
-            }}
-          />
-        )}
-
-        {screen.type === "fishing" && (
-          <FishingGame
             world={getWorld(screen.worldId)}
             onBack={() => goWorldMenu(screen.worldId)}
             onComplete={(stars) => {
