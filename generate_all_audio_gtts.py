@@ -31,20 +31,22 @@ def main():
     kanto_match = re.search(r"const kantoWords\s*=\s*(\[.*?\]);", content)
     johto_match = re.search(r"const johtoWords\s*=\s*(\[.*?\]);", content)
     hoenn_match = re.search(r"const hoennWords\s*=\s*(\[.*?\]);", content)
+    sinnoh_match = re.search(r"const sinnohWords\s*=\s*(\[.*?\]);", content)
 
-    if not (kanto_match and johto_match and hoenn_match):
+    if not (kanto_match and johto_match and hoenn_match and sinnoh_match):
         print("Error: Could not parse all word lists from words.ts!")
         return
 
     kanto_words = json.loads(kanto_match.group(1))
     johto_words = json.loads(johto_match.group(1))
     hoenn_words = json.loads(hoenn_match.group(1))
+    sinnoh_words = json.loads(sinnoh_match.group(1))
 
     # Combine all words and get unique ones to avoid duplicate TTS requests
-    all_words = list(set(kanto_words + johto_words + hoenn_words))
+    all_words = list(set(kanto_words + johto_words + hoenn_words + sinnoh_words))
     all_words.sort()
 
-    print(f"Parsed {len(kanto_words)} Kanto words, {len(johto_words)} Johto words, and {len(hoenn_words)} Hoenn words.")
+    print(f"Parsed {len(kanto_words)} Kanto, {len(johto_words)} Johto, {len(hoenn_words)} Hoenn, and {len(sinnoh_words)} Sinnoh words.")
     print(f"Total unique words to generate: {len(all_words)}")
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -55,6 +57,11 @@ def main():
     for i, word in enumerate(all_words):
         filename = to_filename(word)
         outfile = os.path.join(OUTPUT_DIR, f"{filename}.mp3")
+
+        if os.path.exists(outfile):
+            # Skip if already exists
+            success_count += 1
+            continue
 
         # Log progress
         print(f"[{i+1}/{total}] Genererer lyd for: '{word}' -> {outfile}")

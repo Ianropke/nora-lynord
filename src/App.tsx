@@ -38,6 +38,8 @@ import { TrophyCabinet } from "./components/TrophyCabinet";
 import { MemoryGame } from "./components/MemoryGame";
 import { SpellWordGame } from "./components/SpellWordGame";
 import { TrainGame } from "./components/TrainGame";
+import { StoryShelf } from "./components/StoryShelf";
+import { StoryReader } from "./components/StoryReader";
 
 
 type Screen =
@@ -48,7 +50,9 @@ type Screen =
   | { type: "memory"; worldId: number }
   | { type: "spell"; worldId: number }
   | { type: "train"; worldId: number }
-  | { type: "trophy-cabinet" };
+  | { type: "trophy-cabinet" }
+  | { type: "story-shelf" }
+  | { type: "story-reader"; storyId: string };
 
 // ────────────────────────────────────────────────────────────
 // Pokéball SVG component
@@ -151,10 +155,12 @@ function BackButton({ onClick }: { onClick: () => void }) {
 function HomeScreen({
   onSelectWorld,
   onOpenTrophies,
+  onOpenStories,
   progress,
 }: {
   onSelectWorld: (worldId: number) => void;
   onOpenTrophies: () => void;
+  onOpenStories: () => void;
   progress: ReturnType<typeof useProgress>["progress"];
 }) {
   const [selectedRegionId, setSelectedRegionId] = useState(regions[0].id);
@@ -208,7 +214,20 @@ function HomeScreen({
         </div>
       </div>
 
-
+      {/* Læsehjørne Knap */}
+      <button
+        onClick={onOpenStories}
+        className="w-full btn-touch bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-2xl p-4 mb-5 font-black text-lg flex items-center justify-between border border-white/10 shadow-lg hover:shadow-xl hover:brightness-110 active:scale-[0.98] transition-all animate-slide-up"
+      >
+        <div className="flex items-center gap-3">
+          <BookOpen className="w-7 h-7 text-yellow-300 fill-current animate-pulse-slow" />
+          <div className="text-left">
+            <span className="block font-black text-white text-base">Noras Læsehjørne 📚</span>
+            <span className="block text-[11px] text-white/80 font-bold mt-0.5">Læs sjove historier med dine ord!</span>
+          </div>
+        </div>
+        <ChevronRight className="w-5 h-5 text-white/70" />
+      </button>
 
       {/* Region Tabs */}
       <div className="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide animate-slide-up">
@@ -705,7 +724,7 @@ function FindScreen({
 // ────────────────────────────────────────────────────────────
 export default function App() {
   const [screen, setScreen] = useState<Screen>({ type: "home" });
-  const { progress, addStars, addHardWord, completeWorld } = useProgress();
+  const { progress, addStars, addHardWord, completeWorld, completeStory } = useProgress();
 
   const goHome = () => setScreen({ type: "home" });
 
@@ -742,6 +761,7 @@ export default function App() {
   }, []);
 
   const goTrophies = () => setScreen({ type: "trophy-cabinet" });
+  const goStories = () => setScreen({ type: "story-shelf" });
 
   return (
     <div className="min-h-screen bg-gray-900 text-white font-sans overflow-hidden">
@@ -759,11 +779,30 @@ export default function App() {
           <HomeScreen 
             onSelectWorld={goWorldMenu} 
             onOpenTrophies={goTrophies}
+            onOpenStories={goStories}
             progress={progress} 
           />
         )}
         {screen.type === "trophy-cabinet" && (
           <TrophyCabinet progress={progress} onBack={goHome} />
+        )}
+        {screen.type === "story-shelf" && (
+          <StoryShelf
+            progress={progress}
+            onSelectStory={(storyId) => setScreen({ type: "story-reader", storyId })}
+            onBack={goHome}
+          />
+        )}
+        {screen.type === "story-reader" && (
+          <StoryReader
+            storyId={screen.storyId}
+            onBack={() => setScreen({ type: "story-shelf" })}
+            onComplete={() => {
+              completeStory(screen.storyId);
+              setScreen({ type: "story-shelf" });
+            }}
+            isCompletedBefore={progress.completedStories?.includes(screen.storyId) ?? false}
+          />
         )}
         {screen.type === "world-menu" && (
           <WorldMenuScreen

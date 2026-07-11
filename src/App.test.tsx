@@ -151,7 +151,7 @@ describe('Nora Lynord App Test Suite', () => {
     expect(await screen.findByText('Noras Pokédex')).toBeInTheDocument();
     
     expect(await screen.findByText('10')).toBeInTheDocument(); // 10 stars earned
-    // Verify 1/36 badges earned
-    expect(screen.getByText('1 / 36 badges optjent')).toBeInTheDocument();
+    // Verify 1/48 badges earned
+    expect(screen.getByText('1 / 48 badges optjent')).toBeInTheDocument();
   }, 15000);
 });

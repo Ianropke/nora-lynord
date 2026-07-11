@@ -5,6 +5,7 @@ export interface Progress {
   stars: number;
   hardWords: string[];
   completedWorlds: number[];
+  completedStories: string[];
 }
 
 const STORAGE_KEY = "nora-lynord-progress";
@@ -14,6 +15,7 @@ const defaultProgress: Progress = {
   stars: 0,
   hardWords: [],
   completedWorlds: [],
+  completedStories: [],
 };
 
 function loadProgress(): Progress {
@@ -22,6 +24,7 @@ function loadProgress(): Progress {
     if (!raw) return { ...defaultProgress };
     const parsed = JSON.parse(raw);
     const completedWorlds = parsed.completedWorlds ?? [];
+    const completedStories = parsed.completedStories ?? [];
     
     // Self-heal: ensure unlockedWorlds goes up to max(completedWorlds) + 1
     let maxCompleted = 0;
@@ -29,7 +32,7 @@ function loadProgress(): Progress {
       maxCompleted = Math.max(...completedWorlds);
     }
     const requiredUnlocked = new Set<number>(parsed.unlockedWorlds ?? [1]);
-    for (let i = 1; i <= Math.min(36, maxCompleted + 1); i++) {
+    for (let i = 1; i <= Math.min(48, maxCompleted + 1); i++) {
       requiredUnlocked.add(i);
     }
 
@@ -38,6 +41,7 @@ function loadProgress(): Progress {
       stars: parsed.stars ?? 0,
       hardWords: parsed.hardWords ?? [],
       completedWorlds,
+      completedStories,
     };
   } catch {
     return { ...defaultProgress };
@@ -100,7 +104,7 @@ export function useProgress() {
           updated.completedWorlds = [...updated.completedWorlds, worldId];
         }
         const nextWorld = worldId + 1;
-        if (nextWorld <= 36 && !updated.unlockedWorlds.includes(nextWorld)) {
+        if (nextWorld <= 48 && !updated.unlockedWorlds.includes(nextWorld)) {
           updated.unlockedWorlds = [...updated.unlockedWorlds, nextWorld];
         }
         return updated;
@@ -124,6 +128,21 @@ export function useProgress() {
     return () => window.removeEventListener("storage", handler);
   }, []);
 
+  const completeStory = useCallback(
+    (storyId: string) => {
+      saveUpdater((prev) => {
+        const currentCompleted = prev.completedStories ?? [];
+        if (currentCompleted.includes(storyId)) return prev;
+        return {
+          ...prev,
+          stars: prev.stars + 5,
+          completedStories: [...currentCompleted, storyId],
+        };
+      });
+    },
+    [saveUpdater]
+  );
+
   return {
     progress,
     addStars,
@@ -132,5 +151,6 @@ export function useProgress() {
     unlockWorld,
     completeWorld,
     resetProgress,
+    completeStory,
   };
 }
