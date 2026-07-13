@@ -37,27 +37,27 @@ export const stories: Story[] = [
   // ── LEVEL 2: JOHTO ──
   {
     id: "johto-1",
-    title: "Togepis sommerdag",
+    title: "En god sommerdag",
     regionId: "johto",
-    pokemon: "Togepi",
-    emoji: "🥚",
-    text: "Det er sommer, og solen skinner. Togepi kigger ud af et vindue. Mine venner leger i haven. Min bror og min søster cykler på en ny cykel. Mormor spiser et grønt æble og en gul banan i stuen. Vi er slet ikke trætte!"
+    pokemon: "Cyndaquil",
+    emoji: "🔥",
+    text: "Cyndaquil står ude i en stor have. Han vil gerne køre på sin cykel. Snart kommer lille Togepi med en chokolade og et lille æble. De spiser mad og leger. Det er en god sommerdag."
   },
   {
     id: "johto-2",
     title: "Bjørnen i skoven",
     regionId: "johto",
-    pokemon: "Ursaring",
-    emoji: "🐻",
-    text: "En nat mødte Togepi en stor bjørn i skoven. Først blev Togepi bange, men bjørnen var faktisk rigtig sød. Bjørnen var bare meget sulten og tørstig. De gik ud i køkkenet og drak mælk. Nu er de bedste venner!"
+    pokemon: "Chikorita",
+    emoji: "🍃",
+    text: "Chikorita går en tur i en eventyrskov. Der er lidt mørkt, for det er nat. Nu ser Chikorita en bjørn! Men den lille bjørn er træt og vil sove. Så de siger pænt godnat."
   },
   {
     id: "johto-3",
-    title: "Guld og Sølv",
+    title: "Mælk på trappen",
     regionId: "johto",
-    pokemon: "Cyndaquil",
-    emoji: "🔥",
-    text: "Togepi og Cyndaquil fandt en kiste med guld og sølv under en trappe. Cyndaquil hopper og løber af glæde. Se, en flot krystal og en diamant! sagde Cyndaquil. Det var en fantastisk aften, og de drømmer om det i natten."
+    pokemon: "Togepi",
+    emoji: "🥚",
+    text: "Togepi sidder stille på trappen. Togepi har en flot krystal i sin hånd. Den lyser pænt i den varme aften. Nu kommer mormor ud fra køkkenet. Hun har lidt varm mælk med til Togepi."
   },
 
   // ── LEVEL 3: HOENN ──
