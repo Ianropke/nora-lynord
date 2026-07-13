@@ -44,7 +44,7 @@ export function StoryShelf({ progress, onSelectStory, onBack }: StoryShelfProps)
         <div>
           <h2 className="text-lg font-black text-white">Din bogreol</h2>
           <p className="text-xs text-white/60 mt-1">
-            Læs historier og optjen 5 stjerner pr. bog! ⭐
+            Læs historier og optjen 10 stjerner pr. bog! ⭐
           </p>
         </div>
         <div className="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 px-4 py-2.5 rounded-full text-sm font-black shadow-lg">

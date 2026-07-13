@@ -135,7 +135,7 @@ export function useProgress() {
         if (currentCompleted.includes(storyId)) return prev;
         return {
           ...prev,
-          stars: prev.stars + 5,
+          stars: prev.stars + 10,
           completedStories: [...currentCompleted, storyId],
         };
       });

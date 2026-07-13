@@ -134,7 +134,7 @@ export function StoryReader({ storyId, onBack, onComplete, isCompletedBefore }: 
           {readFinished ? (
             <div className="text-center py-2 animate-bounce">
               <span className="text-green-600 font-black text-xl flex items-center gap-2">
-                🎉 Super flot læst! +5 ⭐
+                🎉 Super flot læst! +10 ⭐
               </span>
             </div>
           ) : (
