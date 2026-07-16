@@ -40,6 +40,8 @@ import { SpellWordGame } from "./components/SpellWordGame";
 import { TrainGame } from "./components/TrainGame";
 import { StoryShelf } from "./components/StoryShelf";
 import { StoryReader } from "./components/StoryReader";
+import { MathShelf } from "./components/MathShelf";
+import { MathQuiz } from "./components/MathQuiz";
 
 
 type Screen =
@@ -52,7 +54,9 @@ type Screen =
   | { type: "train"; worldId: number }
   | { type: "trophy-cabinet" }
   | { type: "story-shelf" }
-  | { type: "story-reader"; storyId: string };
+  | { type: "story-reader"; storyId: string }
+  | { type: "math-shelf" }
+  | { type: "math-quiz"; quizId: string };
 
 // ────────────────────────────────────────────────────────────
 // Pokéball SVG component
@@ -156,11 +160,13 @@ function HomeScreen({
   onSelectWorld,
   onOpenTrophies,
   onOpenStories,
+  onOpenMath,
   progress,
 }: {
   onSelectWorld: (worldId: number) => void;
   onOpenTrophies: () => void;
   onOpenStories: () => void;
+  onOpenMath: () => void;
   progress: ReturnType<typeof useProgress>["progress"];
 }) {
   const [selectedRegionId, setSelectedRegionId] = useState(regions[0].id);
@@ -224,6 +230,21 @@ function HomeScreen({
           <div className="text-left">
             <span className="block font-black text-white text-base">Noras Læsehjørne 📚</span>
             <span className="block text-[11px] text-white/80 font-bold mt-0.5">Læs sjove historier med dine ord!</span>
+          </div>
+        </div>
+        <ChevronRight className="w-5 h-5 text-white/70" />
+      </button>
+
+      {/* Regnehjørne Knap */}
+      <button
+        onClick={onOpenMath}
+        className="w-full btn-touch bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-2xl p-4 mb-5 font-black text-lg flex items-center justify-between border border-white/10 shadow-lg hover:shadow-xl hover:brightness-110 active:scale-[0.98] transition-all animate-slide-up"
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-2xl animate-pulse-slow">🧮</span>
+          <div className="text-left">
+            <span className="block font-black text-white text-base">Noras Regnehjørne</span>
+            <span className="block text-[11px] text-white/80 font-bold mt-0.5">Træn matematik og få stjerner!</span>
           </div>
         </div>
         <ChevronRight className="w-5 h-5 text-white/70" />
@@ -724,7 +745,7 @@ function FindScreen({
 // ────────────────────────────────────────────────────────────
 export default function App() {
   const [screen, setScreen] = useState<Screen>({ type: "home" });
-  const { progress, addStars, addHardWord, completeWorld, completeStory } = useProgress();
+  const { progress, addStars, addHardWord, completeWorld, completeStory, completeMathQuiz } = useProgress();
 
   const goHome = () => setScreen({ type: "home" });
 
@@ -762,6 +783,7 @@ export default function App() {
 
   const goTrophies = () => setScreen({ type: "trophy-cabinet" });
   const goStories = () => setScreen({ type: "story-shelf" });
+  const goMath = () => setScreen({ type: "math-shelf" });
 
   return (
     <div className="min-h-screen bg-gray-900 text-white font-sans overflow-hidden">
@@ -780,6 +802,7 @@ export default function App() {
             onSelectWorld={goWorldMenu} 
             onOpenTrophies={goTrophies}
             onOpenStories={goStories}
+            onOpenMath={goMath}
             progress={progress} 
           />
         )}
@@ -858,6 +881,25 @@ export default function App() {
               addStars(stars);
               completeWorld(screen.worldId);
               goWorldMenu(screen.worldId);
+            }}
+          />
+        )}
+        
+        {screen.type === "math-shelf" && (
+          <MathShelf
+            progress={progress}
+            onSelectQuiz={(quizId) => setScreen({ type: "math-quiz", quizId })}
+            onBack={goHome}
+          />
+        )}
+        
+        {screen.type === "math-quiz" && (
+          <MathQuiz
+            quizId={screen.quizId}
+            onBack={() => setScreen({ type: "math-shelf" })}
+            onComplete={() => {
+              completeMathQuiz(screen.quizId);
+              setScreen({ type: "math-shelf" });
             }}
           />
         )}

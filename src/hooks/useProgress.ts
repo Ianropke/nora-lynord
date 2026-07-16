@@ -6,6 +6,7 @@ export interface Progress {
   hardWords: string[];
   completedWorlds: number[];
   completedStories: string[];
+  completedMathQuizzes: string[];
 }
 
 const STORAGE_KEY = "nora-lynord-progress";
@@ -16,6 +17,7 @@ const defaultProgress: Progress = {
   hardWords: [],
   completedWorlds: [],
   completedStories: [],
+  completedMathQuizzes: [],
 };
 
 function loadProgress(): Progress {
@@ -25,6 +27,7 @@ function loadProgress(): Progress {
     const parsed = JSON.parse(raw);
     const completedWorlds = parsed.completedWorlds ?? [];
     const completedStories = parsed.completedStories ?? [];
+    const completedMathQuizzes = parsed.completedMathQuizzes ?? [];
     
     // Self-heal: ensure unlockedWorlds goes up to max(completedWorlds) + 1
     let maxCompleted = 0;
@@ -42,6 +45,7 @@ function loadProgress(): Progress {
       hardWords: parsed.hardWords ?? [],
       completedWorlds,
       completedStories,
+      completedMathQuizzes,
     };
   } catch {
     return { ...defaultProgress };
@@ -143,6 +147,21 @@ export function useProgress() {
     [saveUpdater]
   );
 
+  const completeMathQuiz = useCallback(
+    (quizId: string) => {
+      saveUpdater((prev) => {
+        const currentCompleted = prev.completedMathQuizzes ?? [];
+        if (currentCompleted.includes(quizId)) return prev;
+        return {
+          ...prev,
+          stars: prev.stars + 10,
+          completedMathQuizzes: [...currentCompleted, quizId],
+        };
+      });
+    },
+    [saveUpdater]
+  );
+
   return {
     progress,
     addStars,
@@ -152,5 +171,6 @@ export function useProgress() {
     completeWorld,
     resetProgress,
     completeStory,
+    completeMathQuiz,
   };
 }
