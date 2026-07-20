@@ -15,13 +15,21 @@ function Pokeball({ className = "", size = 24 }: { className?: string; size?: nu
   );
 }
 
+interface Question {
+  question: string;
+  answer: number;
+  options: number[];
+  sequence?: (number | string)[]; // Used in count mode
+}
+
 interface TimesTableGameProps {
   tableId: number;
+  mode: "mult" | "count";
   onBack: () => void;
   onComplete: () => void;
 }
 
-export function TimesTableGame({ tableId, onBack, onComplete }: TimesTableGameProps) {
+export function TimesTableGame({ tableId, mode, onBack, onComplete }: TimesTableGameProps) {
   const [index, setIndex] = useState(0);
   const [options, setOptions] = useState<number[]>([]);
   const [shakeId, setShakeId] = useState<number | null>(null);
@@ -31,24 +39,22 @@ export function TimesTableGame({ tableId, onBack, onComplete }: TimesTableGamePr
 
   // Generate the 10 questions for this table
   const questions = useMemo(() => {
-    const qs = [];
+    const qs: Question[] = [];
     for (let i = 1; i <= 10; i++) {
       const answer = i * tableId;
       const opts = new Set<number>();
       opts.add(answer);
       
+      // Generate wrong answers
       while (opts.size < 4) {
-        // Generate a plausible wrong answer
         const isCommonError = Math.random() > 0.5;
         let wrongAns = 0;
         
         if (isCommonError) {
-          // off by one multiple (e.g., 3x5 instead of 4x5)
           const wrongI = i + (Math.random() > 0.5 ? 1 : -1);
           wrongAns = (wrongI > 0 ? wrongI : 2) * tableId;
         } else {
-          // randomly close number
-          const offset = Math.floor(Math.random() * 10) + 1;
+          const offset = Math.floor(Math.random() * 5) + 1;
           wrongAns = answer + (Math.random() > 0.5 ? offset : -offset);
         }
         
@@ -56,16 +62,41 @@ export function TimesTableGame({ tableId, onBack, onComplete }: TimesTableGamePr
           opts.add(wrongAns);
         }
       }
-      
-      qs.push({
-        question: `${i} × ${tableId}`,
-        answer: answer,
-        options: Array.from(opts)
-      });
+
+      if (mode === "mult") {
+        qs.push({
+          question: `${i} × ${tableId}`,
+          answer: answer,
+          options: Array.from(opts)
+        });
+      } else {
+        // "count" mode: Skip counting sequence (5 elements window)
+        // Select start index (clamped so sequence doesn't exceed 10)
+        // i goes from 1 to 10
+        // Pick start index between i-4 and i
+        const start = Math.max(1, Math.min(6, i - Math.floor(Math.random() * 5)));
+        const sequence: (number | string)[] = [];
+        
+        for (let j = 0; j < 5; j++) {
+          const currentMult = start + j;
+          if (currentMult === i) {
+            sequence.push("?");
+          } else {
+            sequence.push(currentMult * tableId);
+          }
+        }
+
+        qs.push({
+          question: `Hvad mangler i rækken?`,
+          answer: answer,
+          options: Array.from(opts),
+          sequence: sequence
+        });
+      }
     }
-    // Shuffle the questions so they aren't always 1x, 2x, 3x...
+    // Shuffle the questions
     return qs.sort(() => Math.random() - 0.5);
-  }, [tableId]);
+  }, [tableId, mode]);
 
   // Shuffle options for the current question
   useEffect(() => {
@@ -134,11 +165,13 @@ export function TimesTableGame({ tableId, onBack, onComplete }: TimesTableGamePr
             <span className="text-6xl block mb-4">👏</span>
           )}
           <h2 className="text-3xl font-black mb-2">
-            {perfect ? `${tableId}-tabellen er i hus!` : "Godt forsøgt!"}
+            {perfect 
+              ? `${tableId}-tabellen er klaret!` 
+              : "Godt forsøgt!"}
           </h2>
           <p className="text-white/60 mb-6">
             {perfect
-              ? "Du regnede hele tabellen rigtigt!"
+              ? `Flot klaret! Du fik 10 stjerner for ${mode === "count" ? "tælleremsen" : "gange-mesteren"}!`
               : `Du havde ${mistakes} fejl. Træn videre og prøv igen!`}
           </p>
           <div className="flex gap-3 justify-center">
@@ -190,7 +223,7 @@ export function TimesTableGame({ tableId, onBack, onComplete }: TimesTableGamePr
           <ArrowLeft className="w-6 h-6 text-white" />
         </button>
         <span className="text-white/60 font-bold text-sm">
-          Opgave {index + 1} / {questions.length}
+          {mode === "count" ? "🏃‍♂️ Tælleremse" : "⚔️ Gange-Mester"} • Opgave {index + 1} / {questions.length}
         </span>
         <div className="w-12 text-right">
           <span className="text-2xl font-black text-white">{tableId}</span>
@@ -207,15 +240,47 @@ export function TimesTableGame({ tableId, onBack, onComplete }: TimesTableGamePr
 
       {/* Question */}
       <div className="flex-1 flex flex-col items-center justify-center">
-        <div className="mb-10 animate-pop-in text-center" style={{ opacity: 0 }}>
-          <div className="glass-strong rounded-[3rem] p-10 flex flex-col items-center gap-4 bg-gradient-to-b from-white/10 to-transparent border border-white/20 shadow-2xl">
-            <span className="text-7xl sm:text-8xl font-black tracking-wide text-white drop-shadow-md whitespace-nowrap">
-              {question.question}
-            </span>
-          </div>
-          <p className="text-white/50 font-bold mt-6 text-sm uppercase tracking-widest">
-            Hvad er svaret?
-          </p>
+        <div className="mb-10 animate-pop-in text-center w-full" style={{ opacity: 0 }}>
+          {mode === "mult" ? (
+            <div className="glass-strong rounded-[3rem] p-10 flex flex-col items-center gap-4 bg-gradient-to-b from-white/10 to-transparent border border-white/20 shadow-2xl inline-block">
+              <span className="text-7xl sm:text-8xl font-black tracking-wide text-white drop-shadow-md whitespace-nowrap">
+                {question.question}
+              </span>
+            </div>
+          ) : (
+             // Skip counting layout (2, 4, ?, 8, 10)
+             <div className="flex flex-col items-center gap-6 w-full">
+               <div className="glass-strong rounded-[2rem] sm:rounded-[2.5rem] p-4 sm:p-8 flex justify-center items-center gap-0.5 sm:gap-2 bg-gradient-to-b from-white/10 to-transparent border border-white/20 shadow-2xl w-full max-w-full overflow-hidden">
+                 {question.sequence?.map((num, idx) => {
+                   const isGap = num === "?";
+                   return (
+                     <div key={idx} className="flex items-center">
+                       <div className={`
+                         rounded-xl sm:rounded-2xl w-11 h-11 sm:w-16 sm:h-16 flex items-center justify-center text-base sm:text-2xl font-black
+                         transition-all duration-300
+                         ${isGap
+                           ? correct !== null
+                             ? "bg-green-500 text-white scale-110 border-2 border-green-400"
+                             : "bg-purple-900/40 border-2 border-dashed border-purple-400 text-purple-300 animate-pulse"
+                           : "bg-white/10 text-white border border-white/10"}
+                       `}>
+                         {isGap && correct !== null ? correct : num}
+                       </div>
+                       {idx < 4 && (
+                         <span className="text-white/20 text-xs sm:text-lg font-black mx-1 sm:mx-2">➔</span>
+                       )}
+                     </div>
+                   );
+                 })}
+               </div>
+               <p className="text-white/70 font-bold text-sm">Hvad skal stå i stedet for ?</p>
+             </div>
+          )}
+          {mode === "mult" && (
+            <p className="text-white/50 font-bold mt-6 text-sm uppercase tracking-widest">
+              Hvad er svaret?
+            </p>
+          )}
         </div>
 
         {/* Options */}

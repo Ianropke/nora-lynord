@@ -60,7 +60,7 @@ type Screen =
   | { type: "math-shelf" }
   | { type: "math-quiz"; quizId: string }
   | { type: "times-table-shelf" }
-  | { type: "times-table-game"; tableId: number };
+  | { type: "times-table-game"; tableId: number; mode: "mult" | "count" };
 
 // ────────────────────────────────────────────────────────────
 // Pokéball SVG component
@@ -769,6 +769,7 @@ export default function App() {
   const { progress, addStars, addHardWord, completeWorld, completeStory,
     completeMathQuiz,
     completeTimesTable,
+    completeTimesTableCount,
   } = useProgress();
 
   const goHome = useCallback(() => setScreen({ type: "home" }), []);
@@ -931,7 +932,7 @@ export default function App() {
         {screen.type === "times-table-shelf" && (
           <TimesTableShelf
             progress={progress}
-            onSelectTable={(tableId) => setScreen({ type: "times-table-game", tableId })}
+            onSelectTable={(tableId, mode) => setScreen({ type: "times-table-game", tableId, mode })}
             onBack={goHome}
           />
         )}
@@ -939,9 +940,14 @@ export default function App() {
         {screen.type === "times-table-game" && (
           <TimesTableGame
             tableId={screen.tableId}
+            mode={screen.mode}
             onBack={() => setScreen({ type: "times-table-shelf" })}
             onComplete={() => {
-              completeTimesTable(screen.tableId);
+              if (screen.mode === "mult") {
+                completeTimesTable(screen.tableId);
+              } else {
+                completeTimesTableCount(screen.tableId);
+              }
               setScreen({ type: "times-table-shelf" });
             }}
           />

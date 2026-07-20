@@ -8,6 +8,7 @@ export interface Progress {
   completedStories: string[];
   completedMathQuizzes: string[];
   completedTimesTables: number[];
+  completedTimesTablesCount: number[];
 }
 
 const STORAGE_KEY = "nora-lynord-progress";
@@ -20,6 +21,7 @@ const defaultProgress: Progress = {
   completedStories: [],
   completedMathQuizzes: [],
   completedTimesTables: [],
+  completedTimesTablesCount: [],
 };
 
 function loadProgress(): Progress {
@@ -31,6 +33,7 @@ function loadProgress(): Progress {
     const completedStories = parsed.completedStories ?? [];
     const completedMathQuizzes = parsed.completedMathQuizzes ?? [];
     const completedTimesTables = parsed.completedTimesTables ?? [];
+    const completedTimesTablesCount = parsed.completedTimesTablesCount ?? [];
     
     // Self-heal: ensure unlockedWorlds goes up to max(completedWorlds) + 1
     let maxCompleted = 0;
@@ -50,6 +53,7 @@ function loadProgress(): Progress {
       completedStories,
       completedMathQuizzes,
       completedTimesTables,
+      completedTimesTablesCount,
     };
   } catch {
     return { ...defaultProgress };
@@ -181,6 +185,21 @@ export function useProgress() {
     [saveUpdater]
   );
 
+  const completeTimesTableCount = useCallback(
+    (tableId: number) => {
+      saveUpdater((prev) => {
+        const currentCompleted = prev.completedTimesTablesCount ?? [];
+        if (currentCompleted.includes(tableId)) return prev;
+        return {
+          ...prev,
+          stars: prev.stars + 10,
+          completedTimesTablesCount: [...currentCompleted, tableId],
+        };
+      });
+    },
+    [saveUpdater]
+  );
+
   return {
     progress,
     addStars,
@@ -192,5 +211,6 @@ export function useProgress() {
     completeStory,
     completeMathQuiz,
     completeTimesTable,
+    completeTimesTableCount,
   };
 }
