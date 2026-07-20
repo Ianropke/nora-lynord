@@ -11,11 +11,29 @@ interface StoryShelfProps {
 
 export function StoryShelf({ progress, onSelectStory, onBack }: StoryShelfProps) {
   // Helper to determine if a region is unlocked
-  const isRegionUnlocked = (regionId: string) => {
+  const isRegionUnlocked = (regionId: string): boolean => {
     if (regionId === "kanto") return true;
-    if (regionId === "johto") return progress.unlockedWorlds.includes(13);
-    if (regionId === "hoenn") return progress.unlockedWorlds.includes(25);
-    if (regionId === "sinnoh") return progress.unlockedWorlds.includes(37);
+    
+    // Check if unlocked via word trainer
+    if (regionId === "johto" && progress.unlockedWorlds.includes(13)) return true;
+    if (regionId === "hoenn" && progress.unlockedWorlds.includes(25)) return true;
+    if (regionId === "sinnoh" && progress.unlockedWorlds.includes(37)) return true;
+
+    // Otherwise check if previous region's stories are completed
+    if (regionId === "johto") {
+      const kantoStories = stories.filter(s => s.regionId === "kanto");
+      return kantoStories.every(s => progress.completedStories?.includes(s.id));
+    }
+    if (regionId === "hoenn") {
+      if (!isRegionUnlocked("johto")) return false;
+      const johtoStories = stories.filter(s => s.regionId === "johto");
+      return johtoStories.every(s => progress.completedStories?.includes(s.id));
+    }
+    if (regionId === "sinnoh") {
+      if (!isRegionUnlocked("hoenn")) return false;
+      const hoennStories = stories.filter(s => s.regionId === "hoenn");
+      return hoennStories.every(s => progress.completedStories?.includes(s.id));
+    }
     return false;
   };
 

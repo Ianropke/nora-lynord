@@ -11,11 +11,29 @@ interface MathShelfProps {
 
 export function MathShelf({ progress, onSelectQuiz, onBack }: MathShelfProps) {
   // Helper to determine if a region is unlocked
-  const isRegionUnlocked = (regionId: string) => {
+  const isRegionUnlocked = (regionId: string): boolean => {
     if (regionId === "kanto") return true;
-    if (regionId === "johto") return progress.unlockedWorlds.includes(13);
-    if (regionId === "hoenn") return progress.unlockedWorlds.includes(25);
-    if (regionId === "sinnoh") return progress.unlockedWorlds.includes(37);
+    
+    // Check if unlocked via word trainer
+    if (regionId === "johto" && progress.unlockedWorlds.includes(13)) return true;
+    if (regionId === "hoenn" && progress.unlockedWorlds.includes(25)) return true;
+    if (regionId === "sinnoh" && progress.unlockedWorlds.includes(37)) return true;
+
+    // Otherwise check if previous region's quizzes are completed
+    if (regionId === "johto") {
+      const kantoQuizzes = mathQuizzes.filter(q => q.regionId === "kanto");
+      return kantoQuizzes.every(q => progress.completedMathQuizzes?.includes(q.id));
+    }
+    if (regionId === "hoenn") {
+      if (!isRegionUnlocked("johto")) return false;
+      const johtoQuizzes = mathQuizzes.filter(q => q.regionId === "johto");
+      return johtoQuizzes.every(q => progress.completedMathQuizzes?.includes(q.id));
+    }
+    if (regionId === "sinnoh") {
+      if (!isRegionUnlocked("hoenn")) return false;
+      const hoennQuizzes = mathQuizzes.filter(q => q.regionId === "hoenn");
+      return hoennQuizzes.every(q => progress.completedMathQuizzes?.includes(q.id));
+    }
     return false;
   };
 
