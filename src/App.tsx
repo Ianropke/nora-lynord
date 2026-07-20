@@ -42,6 +42,8 @@ import { StoryShelf } from "./components/StoryShelf";
 import { StoryReader } from "./components/StoryReader";
 import { MathShelf } from "./components/MathShelf";
 import { MathQuiz } from "./components/MathQuiz";
+import { TimesTableShelf } from "./components/TimesTableShelf";
+import { TimesTableGame } from "./components/TimesTableGame";
 
 
 type Screen =
@@ -56,7 +58,9 @@ type Screen =
   | { type: "story-shelf" }
   | { type: "story-reader"; storyId: string }
   | { type: "math-shelf" }
-  | { type: "math-quiz"; quizId: string };
+  | { type: "math-quiz"; quizId: string }
+  | { type: "times-table-shelf" }
+  | { type: "times-table-game"; tableId: number };
 
 // ────────────────────────────────────────────────────────────
 // Pokéball SVG component
@@ -161,12 +165,14 @@ function HomeScreen({
   onOpenTrophies,
   onOpenStories,
   onOpenMath,
+  onOpenTimesTables,
   progress,
 }: {
   onSelectWorld: (worldId: number) => void;
   onOpenTrophies: () => void;
   onOpenStories: () => void;
   onOpenMath: () => void;
+  onOpenTimesTables: () => void;
   progress: ReturnType<typeof useProgress>["progress"];
 }) {
   const [selectedRegionId, setSelectedRegionId] = useState(regions[0].id);
@@ -245,6 +251,21 @@ function HomeScreen({
           <div className="text-left">
             <span className="block font-black text-white text-base">Noras Regnehjørne</span>
             <span className="block text-[11px] text-white/80 font-bold mt-0.5">Træn matematik og få stjerner!</span>
+          </div>
+        </div>
+        <ChevronRight className="w-5 h-5 text-white/70" />
+      </button>
+
+      {/* Tabeller Knap */}
+      <button
+        onClick={onOpenTimesTables}
+        className="w-full btn-touch bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl p-4 mb-5 font-black text-lg flex items-center justify-between border border-white/10 shadow-lg hover:shadow-xl hover:brightness-110 active:scale-[0.98] transition-all animate-slide-up"
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-2xl animate-pulse-slow">✖️</span>
+          <div className="text-left">
+            <span className="block font-black text-white text-base">Noras Tabeller</span>
+            <span className="block text-[11px] text-white/80 font-bold mt-0.5">Lær at gange og få stjerner!</span>
           </div>
         </div>
         <ChevronRight className="w-5 h-5 text-white/70" />
@@ -745,13 +766,20 @@ function FindScreen({
 // ────────────────────────────────────────────────────────────
 export default function App() {
   const [screen, setScreen] = useState<Screen>({ type: "home" });
-  const { progress, addStars, addHardWord, completeWorld, completeStory, completeMathQuiz } = useProgress();
+  const { progress, addStars, addHardWord, completeWorld, completeStory,
+    completeMathQuiz,
+    completeTimesTable,
+  } = useProgress();
 
-  const goHome = () => setScreen({ type: "home" });
-
-  const goWorldMenu = (worldId: number) =>
-    setScreen({ type: "world-menu", worldId });
-
+  const goHome = useCallback(() => setScreen({ type: "home" }), []);
+  const goWorldMenu = useCallback(
+    (worldId: number) => setScreen({ type: "world-menu", worldId }),
+    []
+  );
+  const goTrophies = useCallback(() => setScreen({ type: "trophy-cabinet" }), []);
+  const goStories = useCallback(() => setScreen({ type: "story-shelf" }), []);
+  const goMath = useCallback(() => setScreen({ type: "math-shelf" }), []);
+  const goTimesTables = useCallback(() => setScreen({ type: "times-table-shelf" }), []);
   const getWorld = (id: number) => worlds.find((w) => w.id === id)!;
 
   // iOS audio context init
@@ -780,11 +808,6 @@ export default function App() {
       document.removeEventListener("click", handler);
     };
   }, []);
-
-  const goTrophies = () => setScreen({ type: "trophy-cabinet" });
-  const goStories = () => setScreen({ type: "story-shelf" });
-  const goMath = () => setScreen({ type: "math-shelf" });
-
   return (
     <div className="min-h-screen bg-gray-900 text-white font-sans overflow-hidden">
       {/* Background container */}
@@ -803,6 +826,7 @@ export default function App() {
             onOpenTrophies={goTrophies}
             onOpenStories={goStories}
             onOpenMath={goMath}
+            onOpenTimesTables={goTimesTables}
             progress={progress} 
           />
         )}
@@ -900,6 +924,25 @@ export default function App() {
             onComplete={() => {
               completeMathQuiz(screen.quizId);
               setScreen({ type: "math-shelf" });
+            }}
+          />
+        )}
+        
+        {screen.type === "times-table-shelf" && (
+          <TimesTableShelf
+            progress={progress}
+            onSelectTable={(tableId) => setScreen({ type: "times-table-game", tableId })}
+            onBack={goHome}
+          />
+        )}
+        
+        {screen.type === "times-table-game" && (
+          <TimesTableGame
+            tableId={screen.tableId}
+            onBack={() => setScreen({ type: "times-table-shelf" })}
+            onComplete={() => {
+              completeTimesTable(screen.tableId);
+              setScreen({ type: "times-table-shelf" });
             }}
           />
         )}
