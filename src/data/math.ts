@@ -89,16 +89,16 @@ export const mathQuizzes: MathQuiz[] = [
   },
   {
     id: "math-johto-3",
-    title: "Tiervenner",
+    title: "Tiervenner & Talpar",
     regionId: "johto",
     pokemon: "Cyndaquil",
     emoji: "🔥",
     questions: [
-      { question: "10 + 10", options: [19, 20, 21], answer: 20 },
-      { question: "15 + 5", options: [19, 20, 21], answer: 20 },
-      { question: "13 + 7", options: [19, 20, 21], answer: 20 },
-      { question: "11 + 9", options: [19, 20, 21], answer: 20 },
-      { question: "16 + 4", options: [19, 20, 21], answer: 20 },
+      { question: "6 + 4", options: [8, 10, 12], answer: 10 },
+      { question: "15 + 5", options: [18, 20, 22], answer: 20 },
+      { question: "7 + 3", options: [9, 10, 11], answer: 10 },
+      { question: "12 + 8", options: [19, 20, 21], answer: 20 },
+      { question: "14 + 6", options: [18, 20, 22], answer: 20 },
     ]
   },
 
@@ -111,9 +111,9 @@ export const mathQuizzes: MathQuiz[] = [
     emoji: "💧",
     questions: [
       { question: "5 - 2", options: [2, 3, 4], answer: 3 },
-      { question: "4 - 1", options: [2, 3, 4], answer: 3 },
-      { question: "6 - 3", options: [2, 3, 4], answer: 3 },
-      { question: "8 - 4", options: [3, 4, 5], answer: 4 },
+      { question: "4 - 1", options: [1, 3, 5], answer: 3 },
+      { question: "7 - 3", options: [3, 4, 5], answer: 4 },
+      { question: "8 - 6", options: [1, 2, 3], answer: 2 },
       { question: "10 - 5", options: [4, 5, 6], answer: 5 },
     ]
   },
@@ -155,9 +155,9 @@ export const mathQuizzes: MathQuiz[] = [
     emoji: "🐧",
     questions: [
       { question: "8 + 5", options: [12, 13, 14], answer: 13 },
-      { question: "7 + 6", options: [12, 13, 14], answer: 13 },
-      { question: "9 + 4", options: [12, 13, 14], answer: 13 },
-      { question: "6 + 8", options: [13, 14, 15], answer: 14 },
+      { question: "7 + 6", options: [11, 13, 15], answer: 13 },
+      { question: "9 + 5", options: [13, 14, 15], answer: 14 },
+      { question: "6 + 8", options: [12, 14, 16], answer: 14 },
       { question: "9 + 7", options: [15, 16, 17], answer: 16 },
     ]
   },
@@ -168,10 +168,10 @@ export const mathQuizzes: MathQuiz[] = [
     pokemon: "Lucario",
     emoji: "🐺",
     questions: [
-      { question: "12 - 4", options: [7, 8, 9], answer: 8 },
+      { question: "12 - 5", options: [6, 7, 8], answer: 7 },
       { question: "15 - 7", options: [7, 8, 9], answer: 8 },
-      { question: "14 - 6", options: [7, 8, 9], answer: 8 },
-      { question: "11 - 5", options: [5, 6, 7], answer: 6 },
+      { question: "14 - 5", options: [8, 9, 10], answer: 9 },
+      { question: "11 - 4", options: [6, 7, 8], answer: 7 },
       { question: "13 - 8", options: [4, 5, 6], answer: 5 },
     ]
   },

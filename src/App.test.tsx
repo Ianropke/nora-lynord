@@ -87,7 +87,9 @@ describe('Nora Lynord App Test Suite', () => {
 
     // Wait and verify we do NOT advance to the next word ("er"). We should still see "jeg" in the options.
     // It shakes, but stays on "jeg".
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 600));
+    });
     
     const currentBtns = screen.queryAllByRole('button');
     const buttonTexts = currentBtns.map(b => b.textContent);

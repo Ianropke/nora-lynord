@@ -1,7 +1,23 @@
 import { useState, useCallback, useEffect } from "react";
-import { ArrowLeft, Check, RotateCcw } from "lucide-react";
+import { ArrowLeft, Check, RotateCcw, Volume2 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { mathQuizzes } from "../data/math";
+
+function speakMath(text: string) {
+  if (!("speechSynthesis" in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const formatted = text
+      .replace(/\+/g, " plus ")
+      .replace(/-/g, " minus ")
+      .replace(/×|\*/g, " gange ")
+      .replace(/=/g, " er ");
+    const utterance = new SpeechSynthesisUtterance(formatted);
+    utterance.lang = "da-DK";
+    utterance.rate = 0.85;
+    window.speechSynthesis.speak(utterance);
+  } catch {}
+}
 
 // Use an SVG Pokeball for the final screen
 function Pokeball({ className = "", size = 24 }: { className?: string; size?: number }) {
@@ -187,13 +203,20 @@ export function MathQuiz({ quizId, onBack, onComplete }: MathQuizProps) {
 
       {/* Question */}
       <div className="flex-1 flex flex-col items-center justify-center">
-        <div className="mb-10 animate-pop-in text-center" style={{ opacity: 0 }}>
+        <div className="mb-8 animate-pop-in text-center flex flex-col items-center gap-3" style={{ opacity: 0 }}>
           <div className="glass-strong rounded-[3rem] p-10 flex flex-col items-center gap-4 bg-gradient-to-b from-white/10 to-transparent border border-white/20 shadow-2xl">
             <span className="text-7xl sm:text-8xl font-black tracking-wide text-white drop-shadow-md">
               {question.question}
             </span>
           </div>
-          <p className="text-white/50 font-bold mt-6 text-sm uppercase tracking-widest">
+          <button
+            onClick={() => speakMath(question.question)}
+            className="btn-touch glass px-4 py-2 rounded-full text-white/80 hover:text-white text-xs font-bold flex items-center gap-2 border border-white/10"
+          >
+            <Volume2 className="w-4 h-4 text-blue-300" />
+            <span>Hør opgaven</span>
+          </button>
+          <p className="text-white/50 font-bold mt-2 text-sm uppercase tracking-widest">
             Hvad er svaret?
           </p>
         </div>

@@ -1,6 +1,22 @@
 import { useState, useEffect, useMemo } from "react";
-import { ArrowLeft, Check, RotateCcw } from "lucide-react";
+import { ArrowLeft, Check, RotateCcw, Volume2 } from "lucide-react";
 import confetti from "canvas-confetti";
+
+function speakQuestion(text: string) {
+  if (!("speechSynthesis" in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const formatted = text
+      .replace(/×|\*/g, " gange ")
+      .replace(/\+/g, " plus ")
+      .replace(/-/g, " minus ")
+      .replace(/=/g, " er ");
+    const utterance = new SpeechSynthesisUtterance(formatted);
+    utterance.lang = "da-DK";
+    utterance.rate = 0.85;
+    window.speechSynthesis.speak(utterance);
+  } catch {}
+}
 
 function Pokeball({ className = "", size = 24 }: { className?: string; size?: number }) {
   return (
@@ -47,15 +63,30 @@ export function TimesTableGame({ tableId, mode, onBack, onComplete }: TimesTable
       
       // Generate wrong answers
       while (opts.size < 4) {
-        const isCommonError = Math.random() > 0.5;
         let wrongAns = 0;
         
-        if (isCommonError) {
-          const wrongI = i + (Math.random() > 0.5 ? 1 : -1);
-          wrongAns = (wrongI > 0 ? wrongI : 2) * tableId;
+        if (mode === "count") {
+          // For skip counting, distractors must be other multiples of tableId
+          // so all options belong to the table, forcing sequence knowledge.
+          const candidateMultipliers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].filter(
+            m => m !== i && !opts.has(m * tableId)
+          );
+          if (candidateMultipliers.length > 0) {
+            const randomM = candidateMultipliers[Math.floor(Math.random() * candidateMultipliers.length)];
+            wrongAns = randomM * tableId;
+          } else {
+            wrongAns = answer + (opts.size + 1) * tableId;
+          }
         } else {
-          const offset = Math.floor(Math.random() * 5) + 1;
-          wrongAns = answer + (Math.random() > 0.5 ? offset : -offset);
+          // For multiplication mode: mix of common errors (neighboring multiples) and close offsets
+          const isCommonError = Math.random() > 0.5;
+          if (isCommonError) {
+            const wrongI = i + (Math.random() > 0.5 ? 1 : -1);
+            wrongAns = (wrongI > 0 ? wrongI : 2) * tableId;
+          } else {
+            const offset = Math.floor(Math.random() * 5) + 1;
+            wrongAns = answer + (Math.random() > 0.5 ? offset : -offset);
+          }
         }
         
         if (wrongAns > 0 && wrongAns !== answer) {
@@ -240,16 +271,25 @@ export function TimesTableGame({ tableId, mode, onBack, onComplete }: TimesTable
 
       {/* Question */}
       <div className="flex-1 flex flex-col items-center justify-center">
-        <div className="mb-10 animate-pop-in text-center w-full" style={{ opacity: 0 }}>
+        <div className="mb-8 animate-pop-in text-center w-full" style={{ opacity: 0 }}>
           {mode === "mult" ? (
-            <div className="glass-strong rounded-[3rem] p-10 flex flex-col items-center gap-4 bg-gradient-to-b from-white/10 to-transparent border border-white/20 shadow-2xl inline-block">
-              <span className="text-7xl sm:text-8xl font-black tracking-wide text-white drop-shadow-md whitespace-nowrap">
-                {question.question}
-              </span>
+            <div className="flex flex-col items-center gap-3">
+              <div className="glass-strong rounded-[3rem] p-10 flex flex-col items-center gap-4 bg-gradient-to-b from-white/10 to-transparent border border-white/20 shadow-2xl inline-block relative">
+                <span className="text-7xl sm:text-8xl font-black tracking-wide text-white drop-shadow-md whitespace-nowrap">
+                  {question.question}
+                </span>
+              </div>
+              <button
+                onClick={() => speakQuestion(question.question)}
+                className="btn-touch glass px-4 py-2 rounded-full text-white/80 hover:text-white text-xs font-bold flex items-center gap-2 border border-white/10"
+              >
+                <Volume2 className="w-4 h-4 text-purple-300" />
+                <span>Hør opgaven</span>
+              </button>
             </div>
           ) : (
              // Skip counting layout (2, 4, ?, 8, 10)
-             <div className="flex flex-col items-center gap-6 w-full">
+             <div className="flex flex-col items-center gap-4 w-full">
                <div className="glass-strong rounded-[2rem] sm:rounded-[2.5rem] p-4 sm:p-8 flex justify-center items-center gap-0.5 sm:gap-2 bg-gradient-to-b from-white/10 to-transparent border border-white/20 shadow-2xl w-full max-w-full overflow-hidden">
                  {question.sequence?.map((num, idx) => {
                    const isGap = num === "?";
@@ -273,11 +313,25 @@ export function TimesTableGame({ tableId, mode, onBack, onComplete }: TimesTable
                    );
                  })}
                </div>
-               <p className="text-white/70 font-bold text-sm">Hvad skal stå i stedet for ?</p>
+               <div className="flex items-center gap-3">
+                 <p className="text-white/70 font-bold text-sm">Hvad skal stå i stedet for ?</p>
+                 <button
+                   onClick={() => {
+                     const spoken = (question.sequence || [])
+                       .map(s => (s === "?" ? "hvad" : s))
+                       .join(" ");
+                     speakQuestion(`Tæl med ${tableId}-tabellen: ${spoken}`);
+                   }}
+                   className="btn-touch glass p-2 rounded-full text-white/80 hover:text-white border border-white/10"
+                   title="Hør remsen"
+                 >
+                   <Volume2 className="w-4 h-4 text-purple-300" />
+                 </button>
+               </div>
              </div>
           )}
           {mode === "mult" && (
-            <p className="text-white/50 font-bold mt-6 text-sm uppercase tracking-widest">
+            <p className="text-white/50 font-bold mt-4 text-sm uppercase tracking-widest">
               Hvad er svaret?
             </p>
           )}
