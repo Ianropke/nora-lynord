@@ -66,7 +66,11 @@ export function useProgress() {
   const saveUpdater = useCallback((updater: (prev: Progress) => Progress) => {
     setProgress((prev) => {
       const next = updater(prev);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch (err) {
+        console.warn("localStorage write failed (QuotaExceededError or storage disabled)", err);
+      }
       return next;
     });
   }, []);
