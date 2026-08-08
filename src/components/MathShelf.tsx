@@ -78,6 +78,14 @@ export function MathShelf({ progress, onSelectQuiz, onBack }: MathShelfProps) {
                   <div>
                     <h3 className="font-extrabold text-white text-lg leading-tight">{region.name}</h3>
                     <p className="text-xs text-white/50">{region.description}</p>
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <span className="text-[10px] font-bold bg-blue-500/30 text-blue-200 px-2 py-0.5 rounded-full border border-blue-400/20">
+                        🇩🇰 {region.dkGrade}
+                      </span>
+                      <span className="text-[10px] font-bold bg-amber-500/30 text-amber-200 px-2 py-0.5 rounded-full border border-amber-400/20">
+                        🇮🇳 {region.inGrade}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 {!unlocked && (

@@ -11,6 +11,8 @@ export interface MathRegion {
   name: string;
   badgeEmoji: string;
   description: string;
+  dkGrade: string;
+  inGrade: string;
 }
 
 export interface MathQuiz {
@@ -23,14 +25,14 @@ export interface MathQuiz {
 }
 
 export const mathRegions: MathRegion[] = [
-  { id: "kanto", name: "Level 1: Kanto", badgeEmoji: "🔴", description: "Plus op til 10" },
-  { id: "johto", name: "Level 2: Johto", badgeEmoji: "🔵", description: "Plus op til 20" },
-  { id: "hoenn", name: "Level 3: Hoenn", badgeEmoji: "🟢", description: "Minus op til 10" },
-  { id: "sinnoh", name: "Level 4: Sinnoh", badgeEmoji: "🟡", description: "Plus/Minus op til 20 med overgang" },
-  { id: "unova", name: "Level 5: Unova", badgeEmoji: "🟣", description: "Plus/Minus op til 50" },
-  { id: "kalos", name: "Level 6: Kalos", badgeEmoji: "💖", description: "3-tals regning & Ligninger (?)" },
-  { id: "alola", name: "Level 7: Alola", badgeEmoji: "🌴", description: "Hundrede-tal & Store Hop op til 100" },
-  { id: "galar", name: "Level 8: Galar & Paldea", badgeEmoji: "👑", description: "Mesterens Legendariske Udfordring" },
+  { id: "kanto", name: "Level 1: Kanto", badgeEmoji: "🔴", description: "Plus op til 10", dkGrade: "0. - 1. klasse", inGrade: "Class 1 (UKG / Grade 1)" },
+  { id: "johto", name: "Level 2: Johto", badgeEmoji: "🔵", description: "Plus op til 20", dkGrade: "1. klasse", inGrade: "Class 1 (Grade 1)" },
+  { id: "hoenn", name: "Level 3: Hoenn", badgeEmoji: "🟢", description: "Minus op til 10", dkGrade: "1. klasse", inGrade: "Class 1 (Grade 1)" },
+  { id: "sinnoh", name: "Level 4: Sinnoh", badgeEmoji: "🟡", description: "Plus/Minus op til 20 med overgang", dkGrade: "1. - 2. klasse", inGrade: "Class 1 - 2 (Grade 1-2)" },
+  { id: "unova", name: "Level 5: Unova", badgeEmoji: "🟣", description: "Plus/Minus op til 50", dkGrade: "2. klasse", inGrade: "Class 2 (Grade 2)" },
+  { id: "kalos", name: "Level 6: Kalos", badgeEmoji: "💖", description: "3-tals regning & Ligninger (?)", dkGrade: "2. - 3. klasse", inGrade: "Class 2 - 3 (Grade 2-3)" },
+  { id: "alola", name: "Level 7: Alola", badgeEmoji: "🌴", description: "Hundrede-tal & Store Hop op til 100", dkGrade: "3. klasse", inGrade: "Class 3 (Grade 3)" },
+  { id: "galar", name: "Level 8: Galar & Paldea", badgeEmoji: "👑", description: "Mesterens Legendariske Udfordring", dkGrade: "3. - 4. klasse", inGrade: "Class 3 - 4 (Grade 3-4)" },
 ];
 
 export const mathQuizzes: MathQuiz[] = [
