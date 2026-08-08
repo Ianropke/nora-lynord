@@ -4,14 +4,34 @@ export interface MathQuestion {
   answer: number;
 }
 
+export type MathRegionId = "kanto" | "johto" | "hoenn" | "sinnoh" | "unova" | "kalos" | "alola" | "galar";
+
+export interface MathRegion {
+  id: MathRegionId;
+  name: string;
+  badgeEmoji: string;
+  description: string;
+}
+
 export interface MathQuiz {
   id: string;
   title: string;
-  regionId: "kanto" | "johto" | "hoenn" | "sinnoh";
+  regionId: MathRegionId;
   pokemon: string;
   emoji: string;
   questions: MathQuestion[];
 }
+
+export const mathRegions: MathRegion[] = [
+  { id: "kanto", name: "Level 1: Kanto", badgeEmoji: "🔴", description: "Plus op til 10" },
+  { id: "johto", name: "Level 2: Johto", badgeEmoji: "🔵", description: "Plus op til 20" },
+  { id: "hoenn", name: "Level 3: Hoenn", badgeEmoji: "🟢", description: "Minus op til 10" },
+  { id: "sinnoh", name: "Level 4: Sinnoh", badgeEmoji: "🟡", description: "Plus/Minus op til 20 med overgang" },
+  { id: "unova", name: "Level 5: Unova", badgeEmoji: "🟣", description: "Plus/Minus op til 50" },
+  { id: "kalos", name: "Level 6: Kalos", badgeEmoji: "💖", description: "3-tals regning & Ligninger (?)" },
+  { id: "alola", name: "Level 7: Alola", badgeEmoji: "🌴", description: "Hundrede-tal & Store Hop op til 100" },
+  { id: "galar", name: "Level 8: Galar & Paldea", badgeEmoji: "👑", description: "Mesterens Legendariske Udfordring" },
+];
 
 export const mathQuizzes: MathQuiz[] = [
   // ── LEVEL 1: KANTO (Plus op til 10) ──
@@ -187,6 +207,182 @@ export const mathQuizzes: MathQuiz[] = [
       { question: "14 - 5", options: [8, 9, 10], answer: 9 },
       { question: "9 + 9", options: [17, 18, 19], answer: 18 },
       { question: "18 - 9", options: [8, 9, 10], answer: 9 },
+    ]
+  },
+
+  // ── LEVEL 5: UNOVA (Plus/Minus op til 50) ──
+  {
+    id: "math-unova-1",
+    title: "Victinis 10er-hop",
+    regionId: "unova",
+    pokemon: "Victini",
+    emoji: "✌️",
+    questions: [
+      { question: "20 + 30", options: [40, 50, 60], answer: 50 },
+      { question: "50 - 20", options: [25, 30, 35], answer: 30 },
+      { question: "10 + 40", options: [45, 50, 55], answer: 50 },
+      { question: "40 - 30", options: [10, 15, 20], answer: 10 },
+      { question: "25 + 10", options: [30, 35, 40], answer: 35 },
+    ]
+  },
+  {
+    id: "math-unova-2",
+    title: "Reshirams plus til 50",
+    regionId: "unova",
+    pokemon: "Reshiram",
+    emoji: "🐉",
+    questions: [
+      { question: "23 + 12", options: [33, 35, 37], answer: 35 },
+      { question: "31 + 14", options: [43, 45, 47], answer: 45 },
+      { question: "15 + 22", options: [35, 37, 39], answer: 37 },
+      { question: "24 + 24", options: [46, 48, 50], answer: 48 },
+      { question: "30 + 19", options: [47, 49, 51], answer: 49 },
+    ]
+  },
+  {
+    id: "math-unova-3",
+    title: "Zekroms minus til 50",
+    regionId: "unova",
+    pokemon: "Zekrom",
+    emoji: "⚡",
+    questions: [
+      { question: "45 - 12", options: [31, 33, 35], answer: 33 },
+      { question: "38 - 15", options: [21, 23, 25], answer: 23 },
+      { question: "50 - 25", options: [20, 25, 30], answer: 25 },
+      { question: "42 - 20", options: [20, 22, 24], answer: 22 },
+      { question: "49 - 14", options: [33, 35, 37], answer: 35 },
+    ]
+  },
+
+  // ── LEVEL 6: KALOS (Tre-tals Regning & Ligninger) ──
+  {
+    id: "math-kalos-1",
+    title: "Greninjas 3-tals plus",
+    regionId: "kalos",
+    pokemon: "Greninja",
+    emoji: "🐸",
+    questions: [
+      { question: "4 + 5 + 6", options: [14, 15, 16], answer: 15 },
+      { question: "3 + 7 + 5", options: [13, 15, 17], answer: 15 },
+      { question: "8 + 2 + 6", options: [14, 16, 18], answer: 16 },
+      { question: "5 + 5 + 8", options: [16, 18, 20], answer: 18 },
+      { question: "9 + 1 + 9", options: [17, 19, 21], answer: 19 },
+    ]
+  },
+  {
+    id: "math-kalos-2",
+    title: "Sylveons 3-tals kæder",
+    regionId: "kalos",
+    pokemon: "Sylveon",
+    emoji: "🎀",
+    questions: [
+      { question: "15 - 5 + 3", options: [11, 13, 15], answer: 13 },
+      { question: "10 + 6 - 4", options: [10, 12, 14], answer: 12 },
+      { question: "20 - 5 - 5", options: [8, 10, 12], answer: 10 },
+      { question: "12 + 4 - 6", options: [8, 10, 12], answer: 10 },
+      { question: "18 - 8 + 7", options: [15, 17, 19], answer: 17 },
+    ]
+  },
+  {
+    id: "math-kalos-3",
+    title: "Xerneas' ukendte tal (?)",
+    regionId: "kalos",
+    pokemon: "Xerneas",
+    emoji: "🦌",
+    questions: [
+      { question: "? + 6 = 14", options: [6, 8, 10], answer: 8 },
+      { question: "15 - ? = 8", options: [5, 7, 9], answer: 7 },
+      { question: "? + 10 = 25", options: [13, 15, 17], answer: 15 },
+      { question: "20 - ? = 11", options: [7, 9, 11], answer: 9 },
+      { question: "? + 7 = 19", options: [10, 12, 14], answer: 12 },
+    ]
+  },
+
+  // ── LEVEL 7: ALOLA (Hundrede-tal & Store Hop) ──
+  {
+    id: "math-alola-1",
+    title: "Solgaleos 100-venner",
+    regionId: "alola",
+    pokemon: "Solgaleo",
+    emoji: "🦁",
+    questions: [
+      { question: "60 + 40", options: [90, 100, 110], answer: 100 },
+      { question: "100 - 30", options: [60, 70, 80], answer: 70 },
+      { question: "50 + 50", options: [90, 100, 110], answer: 100 },
+      { question: "90 - 40", options: [40, 50, 60], answer: 50 },
+      { question: "30 + 70", options: [90, 100, 110], answer: 100 },
+    ]
+  },
+  {
+    id: "math-alola-2",
+    title: "Lunalas store plusstykker",
+    regionId: "alola",
+    pokemon: "Lunala",
+    emoji: "🦇",
+    questions: [
+      { question: "45 + 35", options: [70, 80, 90], answer: 80 },
+      { question: "52 + 23", options: [65, 75, 85], answer: 75 },
+      { question: "60 + 25", options: [75, 85, 95], answer: 85 },
+      { question: "38 + 42", options: [70, 80, 90], answer: 80 },
+      { question: "44 + 44", options: [78, 88, 98], answer: 88 },
+    ]
+  },
+  {
+    id: "math-alola-3",
+    title: "Mimikyus store minusstykker",
+    regionId: "alola",
+    pokemon: "Mimikyu",
+    emoji: "👻",
+    questions: [
+      { question: "85 - 25", options: [50, 60, 70], answer: 60 },
+      { question: "70 - 35", options: [25, 35, 45], answer: 35 },
+      { question: "95 - 40", options: [45, 55, 65], answer: 55 },
+      { question: "100 - 45", options: [45, 55, 65], answer: 55 },
+      { question: "66 - 33", options: [23, 33, 43], answer: 33 },
+    ]
+  },
+
+  // ── LEVEL 8: GALAR & PALDEA (Regne-Mesterens Legendariske Udfordring) ──
+  {
+    id: "math-galar-1",
+    title: "Koraidons Legendariske Plus",
+    regionId: "galar",
+    pokemon: "Koraidon",
+    emoji: "🔴",
+    questions: [
+      { question: "47 + 38", options: [75, 85, 95], answer: 85 },
+      { question: "56 + 29", options: [75, 85, 95], answer: 85 },
+      { question: "68 + 27", options: [85, 95, 105], answer: 95 },
+      { question: "39 + 51", options: [80, 90, 100], answer: 90 },
+      { question: "48 + 48", options: [86, 96, 106], answer: 96 },
+    ]
+  },
+  {
+    id: "math-galar-2",
+    title: "Miraidons Legendariske Minus",
+    regionId: "galar",
+    pokemon: "Miraidon",
+    emoji: "🟣",
+    questions: [
+      { question: "72 - 35", options: [27, 37, 47], answer: 37 },
+      { question: "84 - 47", options: [27, 37, 47], answer: 37 },
+      { question: "63 - 28", options: [25, 35, 45], answer: 35 },
+      { question: "91 - 54", options: [27, 37, 47], answer: 37 },
+      { question: "100 - 62", options: [28, 38, 48], answer: 38 },
+    ]
+  },
+  {
+    id: "math-galar-3",
+    title: "Tera-Charizards Mester-Finale",
+    regionId: "galar",
+    pokemon: "Tera Charizard",
+    emoji: "🐉",
+    questions: [
+      { question: "? + 25 = 75", options: [40, 50, 60], answer: 50 },
+      { question: "100 - 45 = ?", options: [45, 55, 65], answer: 55 },
+      { question: "33 + 33 + 34", options: [90, 100, 110], answer: 100 },
+      { question: "90 - ? = 42", options: [38, 48, 58], answer: 48 },
+      { question: "25 + 25 + 50", options: [80, 100, 120], answer: 100 },
     ]
   }
 ];

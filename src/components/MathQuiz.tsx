@@ -8,10 +8,11 @@ function speakMath(text: string) {
   try {
     window.speechSynthesis.cancel();
     const formatted = text
+      .replace(/\?/g, " hvad ")
       .replace(/\+/g, " plus ")
       .replace(/-/g, " minus ")
       .replace(/×|\*/g, " gange ")
-      .replace(/=/g, " er ");
+      .replace(/=/g, " er lig med ");
     const utterance = new SpeechSynthesisUtterance(formatted);
     utterance.lang = "da-DK";
     utterance.rate = 0.85;

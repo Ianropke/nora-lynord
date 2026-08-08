@@ -1,7 +1,6 @@
 import { Calculator, ArrowLeft, Lock, Star } from "lucide-react";
 import type { Progress } from "../hooks/useProgress";
-import { mathQuizzes } from "../data/math";
-import { regions } from "../data/words";
+import { mathQuizzes, mathRegions } from "../data/math";
 
 interface MathShelfProps {
   progress: Progress;
@@ -10,29 +9,23 @@ interface MathShelfProps {
 }
 
 export function MathShelf({ progress, onSelectQuiz, onBack }: MathShelfProps) {
-  // Helper to determine if a region is unlocked
+  // Helper to determine if a math region is unlocked
   const isRegionUnlocked = (regionId: string): boolean => {
     if (regionId === "kanto") return true;
     
-    // Check if unlocked via word trainer
+    // Check if unlocked via word trainer (for first 4 regions)
     if (regionId === "johto" && progress.unlockedWorlds.includes(13)) return true;
     if (regionId === "hoenn" && progress.unlockedWorlds.includes(25)) return true;
     if (regionId === "sinnoh" && progress.unlockedWorlds.includes(37)) return true;
 
-    // Otherwise check if previous region's quizzes are completed
-    if (regionId === "johto") {
-      const kantoQuizzes = mathQuizzes.filter(q => q.regionId === "kanto");
-      return kantoQuizzes.every(q => progress.completedMathQuizzes?.includes(q.id));
-    }
-    if (regionId === "hoenn") {
-      if (!isRegionUnlocked("johto")) return false;
-      const johtoQuizzes = mathQuizzes.filter(q => q.regionId === "johto");
-      return johtoQuizzes.every(q => progress.completedMathQuizzes?.includes(q.id));
-    }
-    if (regionId === "sinnoh") {
-      if (!isRegionUnlocked("hoenn")) return false;
-      const hoennQuizzes = mathQuizzes.filter(q => q.regionId === "hoenn");
-      return hoennQuizzes.every(q => progress.completedMathQuizzes?.includes(q.id));
+    // Region sequence unlocking: previous region's quizzes must all be completed
+    const regionOrder = ["kanto", "johto", "hoenn", "sinnoh", "unova", "kalos", "alola", "galar"];
+    const idx = regionOrder.indexOf(regionId);
+    if (idx > 0) {
+      const prevRegionId = regionOrder[idx - 1];
+      if (!isRegionUnlocked(prevRegionId)) return false;
+      const prevQuizzes = mathQuizzes.filter(q => q.regionId === prevRegionId);
+      return prevQuizzes.every(q => progress.completedMathQuizzes?.includes(q.id));
     }
     return false;
   };
@@ -60,9 +53,9 @@ export function MathShelf({ progress, onSelectQuiz, onBack }: MathShelfProps) {
       {/* Stats Card */}
       <div className="glass-strong rounded-3xl p-5 mb-8 animate-pop-in border border-white/10 flex justify-between items-center relative overflow-hidden pokeball-bg">
         <div>
-          <h2 className="text-lg font-black text-white">Opgaver</h2>
+          <h2 className="text-lg font-black text-white">Regne-Udfordringer</h2>
           <p className="text-xs text-white/60 mt-1">
-            Løs opgaver og optjen 10 stjerner! ⭐
+            Løs opgaver og optjen 10 stjerner pr. opgave! ⭐
           </p>
         </div>
         <div className="flex items-center gap-2 bg-gradient-to-r from-blue-400 to-indigo-500 text-white px-4 py-2.5 rounded-full text-sm font-black shadow-lg">
@@ -73,17 +66,22 @@ export function MathShelf({ progress, onSelectQuiz, onBack }: MathShelfProps) {
 
       {/* Quizzes grid by Region */}
       <div className="space-y-8 pb-12">
-        {regions.map((region) => {
+        {mathRegions.map((region) => {
           const unlocked = isRegionUnlocked(region.id);
           const regionQuizzes = mathQuizzes.filter((q) => q.regionId === region.id);
 
           return (
             <div key={region.id} className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">{region.id === "kanto" ? "🔴" : region.id === "johto" ? "🔵" : region.id === "hoenn" ? "🟢" : "🟡"}</span>
-                <h3 className="font-extrabold text-white text-lg">{region.name}</h3>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{region.badgeEmoji}</span>
+                  <div>
+                    <h3 className="font-extrabold text-white text-lg leading-tight">{region.name}</h3>
+                    <p className="text-xs text-white/50">{region.description}</p>
+                  </div>
+                </div>
                 {!unlocked && (
-                  <span className="text-xs bg-black/40 text-white/50 px-2 py-0.5 rounded-md flex items-center gap-1">
+                  <span className="text-xs bg-black/40 text-white/50 px-2.5 py-1 rounded-full flex items-center gap-1 font-semibold">
                     <Lock className="w-3 h-3" /> Låst
                   </span>
                 )}
@@ -102,7 +100,7 @@ export function MathShelf({ progress, onSelectQuiz, onBack }: MathShelfProps) {
                         glass hover:bg-white/10 active:scale-[0.99] transition-all border border-white/5
                       `}
                     >
-                      {/* Read status icon */}
+                      {/* Completion star status */}
                       {isCompleted && (
                         <div className="absolute top-2.5 right-2.5 bg-yellow-400 rounded-full p-1 shadow animate-bounce">
                           <Star className="w-3.5 h-3.5 text-gray-900 fill-current" />
