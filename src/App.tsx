@@ -770,6 +770,7 @@ export default function App() {
     completeMathQuiz,
     completeTimesTable,
     completeTimesTableCount,
+    resetProgress,
   } = useProgress();
 
   const goHome = useCallback(() => setScreen({ type: "home" }), []);
@@ -832,7 +833,7 @@ export default function App() {
           />
         )}
         {screen.type === "trophy-cabinet" && (
-          <TrophyCabinet progress={progress} onBack={goHome} />
+          <TrophyCabinet progress={progress} onBack={goHome} onResetProgress={resetProgress} />
         )}
         {screen.type === "story-shelf" && (
           <StoryShelf

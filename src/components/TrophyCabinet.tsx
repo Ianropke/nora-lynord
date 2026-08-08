@@ -5,6 +5,7 @@ import { worlds } from "../data/words";
 interface TrophyCabinetProps {
   progress: Progress;
   onBack: () => void;
+  onResetProgress?: () => void;
 }
 
 const PRIZES = [
@@ -19,7 +20,7 @@ const PRIZES = [
   { stars: 240, name: "Guld Pokal", emoji: "🏆" },
 ];
 
-export function TrophyCabinet({ progress, onBack }: TrophyCabinetProps) {
+export function TrophyCabinet({ progress, onBack, onResetProgress }: TrophyCabinetProps) {
   // Compute how many badges were earned
   const earnedBadges = worlds.filter((w) =>
     progress.completedWorlds.includes(w.id)
@@ -110,6 +111,22 @@ export function TrophyCabinet({ progress, onBack }: TrophyCabinetProps) {
             })}
           </div>
         </div>
+
+        {/* Discrete Parent Reset Progress Button */}
+        {onResetProgress && (
+          <div className="pt-4 text-center">
+            <button
+              onClick={() => {
+                if (window.confirm("Er du sikker på, at du vil nulstille alle stjerner og fremskridt? Denne handling kan ikke fortrydes.")) {
+                  onResetProgress();
+                }
+              }}
+              className="text-xs text-white/30 hover:text-red-300 underline transition-colors btn-touch py-2 px-4"
+            >
+              Nulstil fremskridt (Forældre)
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

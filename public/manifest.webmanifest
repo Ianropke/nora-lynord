@@ -1,0 +1,15 @@
+{
+  "name": "Noras Lynord",
+  "short_name": "Lynord",
+  "theme_color": "#6366f1",
+  "background_color": "#111827",
+  "display": "standalone",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
