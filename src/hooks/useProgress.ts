@@ -82,7 +82,7 @@ export function useProgress() {
       if (p.completedWorlds.includes(id)) return p;
       const unlocked = [...p.unlockedWorlds];
       if (id < MAX_WORLD_ID && !unlocked.includes(id + 1)) unlocked.push(id + 1);
-      return { ...p, completedWorlds: [...p.completedWorlds, id], unlockedWorlds: unlocked.sort((a,b)=>a-b), stars: p.stars + 10 };
+      return { ...p, completedWorlds: [...p.completedWorlds, id], unlockedWorlds: unlocked.sort((a,b)=>a-b) };
     });
   }, [saveUpdater]);
   const resetProgress = useCallback(() => saveUpdater(() => ({ ...defaultProgress })), [saveUpdater]);
