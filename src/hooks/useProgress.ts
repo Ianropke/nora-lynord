@@ -13,7 +13,7 @@ export interface Progress {
 
 const STORAGE_KEY = "nora-lynord-progress";
 const CURRENT_PROGRESS_VERSION = 1;
-const MAX_WORLD_ID = 48;
+const MAX_WORLD_ID = 60;
 
 const defaultProgress: Progress = {
   unlockedWorlds: [1], stars: 0, hardWords: [], completedWorlds: [],
