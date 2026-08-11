@@ -1,6 +1,6 @@
 /**
  * Noras Lynord Data
- * Indeholder Level 1 (Kanto) og Level 2 (Johto).
+ * Indeholder Level 1-5 med 60 ruter og 600 danske ord.
  */
 
 export interface Word {
@@ -48,6 +48,9 @@ const hoennWorldNames = [{"name": "Littleroot Town", "emoji": "🏡", "pokemon":
 const sinnohWords = ["selvstændig", "hemmelighed", "nysgerrighed", "uforståelig", "mærkværdig", "modbydelig", "uforsigtig", "utålmodig", "uheldigvis", "pludselig", "arbejdsløs", "arbejdskraft", "beskyttelse", "beskedent", "eventyrlig", "forklaring", "forestilling", "forfærdelig", "forudsætning", "genkendelig", "hovedperson", "holdsport", "håbløshed", "indflydelse", "kontrol", "kunstner", "landskab", "langvarig", "lidenskab", "lynhurtig", "modstander", "mørklægning", "opmærksom", "opfindsom", "planlægning", "retfærdig", "retning", "rædselsfuld", "samvittighed", "skuffelse", "skræmmende", "spænding", "stolthed", "stædighed", "sundhed", "surhed", "sværhedsgrad", "tålmodighed", "tilfældig", "troværdig", "ubehagelig", "udfordring", "uendelig", "ufattelig", "uretfærdig", "usandsynlig", "udvikling", "vidunderlig", "virkelighed", "værdifuld", "særpræget", "ræsonnement", "overbevisning", "oprigtighed", "taknemmelighed", "uafhængig", "udelukkende", "forbindelse", "forventning", "forestille", "fuldstændig", "overveje", "beslutte", "betydning", "opmærksomhed", "hemmelig", "forsigtig", "tålmodig", "stædig", "beskidt", "legeplads", "skattejagt", "fodboldbane", "fødselsdag", "blyantspidser", "skoletaske", "viskelæder", "madpakke", "drikkedunk", "skoleskema", "istap", "snebold", "snemand", "vintertid", "slædebakke", "skistave", "nordlys", "frostvejr", "isbjørne", "nordpol", "solcreme", "strandstol", "badedragt", "sandslotte", "vandslange", "krabber", "vandmænd", "strandbold", "badelagen", "svømmevinge", "mesterskab", "pokalvinder", "sejrsherre", "guldmedalje", "sølvmedalje", "bronzemedalje", "champion", "pokal", "sejr", "pokalturnering"];
 const sinnohWorldNames = [{"name": "Twinleaf Town", "emoji": "🏡", "pokemon": "Normal"}, {"name": "Sandgem City", "emoji": "🏖️", "pokemon": "Water"}, {"name": "Jubilife City", "emoji": "🏙️", "pokemon": "Normal"}, {"name": "Oreburgh City", "emoji": "🪨", "pokemon": "Rock"}, {"name": "Floaroma Town", "emoji": "🌸", "pokemon": "Grass"}, {"name": "Eterna City", "emoji": "🌲", "pokemon": "Grass"}, {"name": "Hearthome City", "emoji": "⛪", "pokemon": "Ghost"}, {"name": "Veilstone City", "emoji": "🏬", "pokemon": "Fighting"}, {"name": "Pastoria City", "emoji": "🐊", "pokemon": "Water"}, {"name": "Snowpoint City", "emoji": "❄️", "pokemon": "Ice"}, {"name": "Sunyshore City", "emoji": "⚡", "pokemon": "Electric"}, {"name": "Sinnoh Liga", "emoji": "🏆", "pokemon": "Master"}];
 
+const unovaWords = ["eventyr","rejse","opdagelse","hemmelighed","skovsti","bjergtop","flod","dal","landsby","bytorv","marked","bro","fyrtårn","kyst","ø","hule","ruin","slot","tårn","have","stjerne","måne","solopgang","solnedgang","skygge","lysstråle","regndråbe","vandfald","bål","lejrbål","rygsæk","kompas","kort","kikkert","lommelygte","sovepose","telt","vandflaske","madpakke","snor","nøgle","blyant","viskelæder","lineal","saks","lim","maling","pensel","palet","kasse","kuffert","pakke","brev","besked","telefon","kamera","billede","film","musik","tromme","guitar","klaver","melodi","rytme","danser","scene","publikum","forestilling","grine","smile","råbe","hviske","lytte","spørge","svare","forklare","fortælle","beskrive","bygge","skabe","opfinde","reparere","sortere","samle","bytte","hjælpe","samarbejde","aftale","regel","plan","mål","drøm","mod","styrke","øvelse","træning","forsøg","resultat","løsning","fejltagelse","læring","belønning","fremskridt","ansvar","beslutning","overraskelse","fantasi","nysgerrig","modig","venlig","kreativ","tålmodig","opmærksom","stærk","stille","hurtigere","dygtig","stolt","klar","sammen"];
+const unovaWorldNames = [{"name":"Nuvema Town","emoji":"🏡","pokemon":"Normal"},{"name":"Accumula Town","emoji":"🌇","pokemon":"Normal"},{"name":"Striaton City","emoji":"🍽️","pokemon":"Grass"},{"name":"Nacrene City","emoji":"🏛️","pokemon":"Rock"},{"name":"Castelia City","emoji":"🏙️","pokemon":"Bug"},{"name":"Nimbasa City","emoji":"🎡","pokemon":"Electric"},{"name":"Driftveil City","emoji":"🚂","pokemon":"Ground"},{"name":"Mistralton City","emoji":"✈️","pokemon":"Flying"},{"name":"Icirrus City","emoji":"❄️","pokemon":"Ice"},{"name":"Opelucid City","emoji":"🐉","pokemon":"Dragon"},{"name":"Victory Road","emoji":"⭐","pokemon":"Fighting"},{"name":"Unova Liga","emoji":"🏆","pokemon":"Master"}];
+
 export const regions: Region[] = [
   {
     id: "kanto",
@@ -68,6 +71,11 @@ export const regions: Region[] = [
     id: "sinnoh",
     name: "Level 4: Sinnoh",
     worlds: createWorlds(sinnohWorldNames, sinnohWords, 37),
+  },
+  {
+    id: "unova",
+    name: "Level 5: Unova",
+    worlds: createWorlds(unovaWorldNames, unovaWords, 49),
   },
 ];
 
