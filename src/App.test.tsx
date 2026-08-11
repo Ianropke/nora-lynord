@@ -19,6 +19,7 @@ describe('Nora Lynord App Test Suite', () => {
     expect(screen.getByText('Noras Pokédex')).toBeInTheDocument();
     expect(screen.getByText('Pallet Town')).toBeInTheDocument();
     expect(screen.getByText('Level 5: Unova')).toBeInTheDocument();
+    expect(screen.getByText('Level 6: Kalos')).toBeInTheDocument();
 
     // Click on world 1
     fireEvent.click(screen.getByText('Pallet Town'));
@@ -155,6 +156,6 @@ describe('Nora Lynord App Test Suite', () => {
     
     expect(await screen.findByText('10')).toBeInTheDocument(); // 10 stars earned
     // Verify 1/48 badges earned
-    expect(screen.getByText('1 / 60 badges optjent')).toBeInTheDocument();
+    expect(screen.getByText('1 / 72 badges optjent')).toBeInTheDocument();
   }, 15000);
 });

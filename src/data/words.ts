@@ -1,6 +1,6 @@
 /**
  * Noras Lynord Data
- * Indeholder Level 1-5 med 60 ruter og 600 danske ord.
+ * Indeholder Level 1-6 med 72 ruter og 720 danske ord.
  */
 
 export interface Word {
@@ -51,6 +51,9 @@ const sinnohWorldNames = [{"name": "Twinleaf Town", "emoji": "🏡", "pokemon": 
 const unovaWords = ["eventyr","rejse","opdagelse","hemmelighed","skovsti","bjergtop","flod","dal","landsby","bytorv","marked","bro","fyrtårn","kyst","ø","hule","ruin","slot","tårn","have","stjerne","måne","solopgang","solnedgang","skygge","lysstråle","regndråbe","vandfald","bål","lejrbål","rygsæk","kompas","kort","kikkert","lommelygte","sovepose","telt","vandflaske","madpakke","snor","nøgle","blyant","viskelæder","lineal","saks","lim","maling","pensel","palet","kasse","kuffert","pakke","brev","besked","telefon","kamera","billede","film","musik","tromme","guitar","klaver","melodi","rytme","danser","scene","publikum","forestilling","grine","smile","råbe","hviske","lytte","spørge","svare","forklare","fortælle","beskrive","bygge","skabe","opfinde","reparere","sortere","samle","bytte","hjælpe","samarbejde","aftale","regel","plan","mål","drøm","mod","styrke","øvelse","træning","forsøg","resultat","løsning","fejltagelse","læring","belønning","fremskridt","ansvar","beslutning","overraskelse","fantasi","nysgerrig","modig","venlig","kreativ","tålmodig","opmærksom","stærk","stille","hurtigere","dygtig","stolt","klar","sammen"];
 const unovaWorldNames = [{"name":"Nuvema Town","emoji":"🏡","pokemon":"Normal"},{"name":"Accumula Town","emoji":"🌇","pokemon":"Normal"},{"name":"Striaton City","emoji":"🍽️","pokemon":"Grass"},{"name":"Nacrene City","emoji":"🏛️","pokemon":"Rock"},{"name":"Castelia City","emoji":"🏙️","pokemon":"Bug"},{"name":"Nimbasa City","emoji":"🎡","pokemon":"Electric"},{"name":"Driftveil City","emoji":"🚂","pokemon":"Ground"},{"name":"Mistralton City","emoji":"✈️","pokemon":"Flying"},{"name":"Icirrus City","emoji":"❄️","pokemon":"Ice"},{"name":"Opelucid City","emoji":"🐉","pokemon":"Dragon"},{"name":"Victory Road","emoji":"⭐","pokemon":"Fighting"},{"name":"Unova Liga","emoji":"🏆","pokemon":"Master"}];
 
+const kalosWords = ["fordybelse","sammenligning","argument","bevis","årsag","virkning","eksempel","sammenhæng","forskel","lighed","mønster","rækkefølge","retfærdighed","ansvarlig","beskrivelse","fortolkning","spørgsmål","svarmulighed","beslutning","forklaring","opfindelse","opdagelsesrejsende","laboratorium","eksperiment","forstørrelsesglas","mikroskop","magnet","måling","temperatur","vægt","afstand","hastighed","retning","vinkel","form","cirkel","trekant","firkant","kube","mønsterbrik","jordklode","kontinent","hovedstad","grænse","beboer","kultur","sprog","tradition","festival","museum","teater","udstilling","forfatter","illustration","kapitel","sætning","punktum","komma","overskrift","ordbog","samvittighed","venlighed","ærlighed","nysgerrighed","tillid","respekt","samarbejde","fællesskab","fortryde","tilgive","forsvare","beskytte","opmuntre","foreslå","forhandle","diskutere","enige","uenige","vælge","prioritere","planlægge","forberede","gennemføre","fortsætte","forandre","forbedre","undersøge","opdage","udvikle","vurdere","muligt","umuligt","sandsynlig","sjælden","almindelig","nødvendig","farlig","sikker","forsigtig","præcis","tålmodighed","koncentration","fantasi","skuffelse","begejstring","bekymring","lettelse","stolthed","overraskelse","forventning","eventyrlig","fremragende","besværlig","uventet","særlig","nøjagtig","effektiv","moderne","enorm","betydningsfuld"];
+const kalosWorldNames = [{"name":"Vaniville Town","emoji":"🏡","pokemon":"Normal"},{"name":"Aquacorde Town","emoji":"💧","pokemon":"Water"},{"name":"Santalune City","emoji":"🌳","pokemon":"Bug"},{"name":"Cyllage City","emoji":"🪨","pokemon":"Rock"},{"name":"Ambrette Town","emoji":"🦴","pokemon":"Fossil"},{"name":"Lumiose City","emoji":"💡","pokemon":"Electric"},{"name":"Laverre City","emoji":"🍄","pokemon":"Fairy"},{"name":"Dendemille Town","emoji":"🌾","pokemon":"Grass"},{"name":"Anistar City","emoji":"🔮","pokemon":"Psychic"},{"name":"Snowbelle City","emoji":"❄️","pokemon":"Ice"},{"name":"Victory Road","emoji":"⭐","pokemon":"Fighting"},{"name":"Kalos Liga","emoji":"🏆","pokemon":"Master"}];
+
 export const regions: Region[] = [
   {
     id: "kanto",
@@ -76,6 +79,11 @@ export const regions: Region[] = [
     id: "unova",
     name: "Level 5: Unova",
     worlds: createWorlds(unovaWorldNames, unovaWords, 49),
+  },
+  {
+    id: "kalos",
+    name: "Level 6: Kalos",
+    worlds: createWorlds(kalosWorldNames, kalosWords, 61),
   },
 ];
 
