@@ -176,6 +176,38 @@ function HomeScreen({
   progress: ReturnType<typeof useProgress>["progress"];
 }) {
   const [selectedRegionId, setSelectedRegionId] = useState(regions[0].id);
+  const regionTabsRef = useRef<HTMLDivElement>(null);
+  const [showRegionScrollHint, setShowRegionScrollHint] = useState(false);
+
+  const updateRegionScrollHint = useCallback(() => {
+    const tabs = regionTabsRef.current;
+    if (!tabs) return;
+    setShowRegionScrollHint(
+      tabs.scrollWidth > tabs.clientWidth &&
+      tabs.scrollLeft + tabs.clientWidth < tabs.scrollWidth - 4
+    );
+  }, []);
+
+  useEffect(() => {
+    const tabs = regionTabsRef.current;
+    if (!tabs) return;
+    updateRegionScrollHint();
+    tabs.addEventListener("scroll", updateRegionScrollHint, { passive: true });
+    window.addEventListener("resize", updateRegionScrollHint);
+    return () => {
+      tabs.removeEventListener("scroll", updateRegionScrollHint);
+      window.removeEventListener("resize", updateRegionScrollHint);
+    };
+  }, [updateRegionScrollHint]);
+
+  const revealMoreRegions = useCallback(() => {
+    const tabs = regionTabsRef.current;
+    if (!tabs) return;
+    tabs.scrollBy({
+      left: Math.max(tabs.clientWidth * 0.75, 160),
+      behavior: "smooth",
+    });
+  }, []);
 
   return (
     <div className="min-h-full px-4 py-6 pb-20">
@@ -272,22 +304,46 @@ function HomeScreen({
       </button>
 
       {/* Region Tabs */}
-      <div className="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide animate-slide-up">
-        {regions.map((region) => (
-          <button
-            key={region.id}
-            onClick={() => setSelectedRegionId(region.id)}
-            className={`whitespace-nowrap px-4 py-2 rounded-xl font-bold text-sm transition-all ${
-              selectedRegionId === region.id
-                ? "bg-white text-purple-900 shadow-md scale-105"
-                : "bg-white/10 text-white/60 hover:bg-white/20"
-            }`}
-          >
-            {region.name}
-          </button>
-        ))}
+      <div className="relative mb-4 animate-slide-up">
+        <div
+          ref={regionTabsRef}
+          role="tablist"
+          aria-label="Vælg niveau"
+          className="flex gap-2 overflow-x-auto pb-2 pr-8 scrollbar-hide scroll-smooth"
+        >
+          {regions.map((region) => (
+            <button
+              key={region.id}
+              role="tab"
+              aria-selected={selectedRegionId === region.id}
+              onClick={() => setSelectedRegionId(region.id)}
+              className={`flex-shrink-0 whitespace-nowrap px-4 py-2 rounded-xl font-bold text-sm transition-all ${
+                selectedRegionId === region.id
+                  ? "bg-white text-purple-900 shadow-md scale-105"
+                  : "bg-white/10 text-white/60 hover:bg-white/20"
+              }`}
+            >
+              {region.name}
+            </button>
+          ))}
+        </div>
+        {showRegionScrollHint && (
+          <>
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute right-0 top-0 bottom-2 w-16 bg-gradient-to-l from-gray-900/90 via-gray-900/50 to-transparent"
+            />
+            <button
+              type="button"
+              onClick={revealMoreRegions}
+              aria-label="Vis flere levels"
+              className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-purple-900 shadow-lg transition-transform hover:scale-105 active:scale-95"
+            >
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </>
+        )}
       </div>
-
       {/* Route Grid */}
       <div className="grid grid-cols-2 gap-3">
         {regions.find(r => r.id === selectedRegionId)?.worlds.map((world, i) => {
