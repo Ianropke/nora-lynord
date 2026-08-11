@@ -12,7 +12,7 @@ describe("useProgress", () => {
     expect(result.current.progress).toMatchObject({ stars: 0, unlockedWorlds: [1] });
   });
   it("sanitises invalid persisted values", () => {
-    localStorage.setItem(key, JSON.stringify({ stars: -10, unlockedWorlds: [1,2,2,49,"3"], completedWorlds: [2,2,-1,49,"4"], hardWords: ["kat","kat",42] }));
+    localStorage.setItem(key, JSON.stringify({ stars: -10, unlockedWorlds: [1,2,2,61,"3"], completedWorlds: [2,2,-1,61,"4"], hardWords: ["kat","kat",42] }));
     const { result } = renderHook(() => useProgress());
     expect(result.current.progress.stars).toBe(0);
     expect(result.current.progress.unlockedWorlds).toEqual([1,2,3]);
@@ -27,10 +27,10 @@ describe("useProgress", () => {
     expect(result.current.progress.unlockedWorlds).toContain(2);
     expect(result.current.progress.stars).toBe(0);
   });
-  it("does not unlock world 49", () => {
+  it("does not unlock world 61", () => {
     const { result } = renderHook(() => useProgress());
-    act(() => result.current.completeWorld(48));
-    expect(result.current.progress.unlockedWorlds).not.toContain(49);
+    act(() => result.current.completeWorld(60));
+    expect(result.current.progress.unlockedWorlds).not.toContain(61);
   });
   it("makes story completion idempotent", () => {
     const { result } = renderHook(() => useProgress());
