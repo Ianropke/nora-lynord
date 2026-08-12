@@ -18,7 +18,7 @@ Read the following before changing the related area:
 - `src/App.tsx` and `src/components/` — screen navigation, module composition, and user-facing behavior.
 - `src/**/*.test.ts(x)` — executable regression evidence. Update tests when behavior changes.
 
-`GLOBAL_CODE_QA.md`, `LEARNINGS.md`, and `TEST_PLAN.md` are useful historical/design notes, but they are not authoritative where they conflict with code. They still contain obsolete claims about 4 regions, 48 worlds, 480 words, and Playwright coverage. Do not copy those numbers into new work. There is no README, ADR set, roadmap, security document, database schema, or CI workflow in the repository at present.
+`README.md`, `GLOBAL_CODE_QA.md`, `LEARNINGS.md`, and `TEST_PLAN.md` explain setup, design, and QA expectations, but they are not authoritative where they conflict with code. There is no ADR set, roadmap, security document, or database schema in the repository. CI is defined in `.github/workflows/ci.yml`, and browser smoke coverage is defined in `playwright.config.ts` and `e2e/`.
 
 ## Architectural invariants
 
@@ -33,7 +33,7 @@ Read the following before changing the related area:
 - Math region IDs and quiz IDs are separate from language world IDs. Do not conflate math completion with language completion; use the module's own completion collections.
 - Rewards and completion callbacks are deliberately guarded against duplicate completion. Preserve that behavior when editing game screens.
 - Treat vocabulary and quiz arrays as authored data, not filler. Do not invent values or silently substitute unrelated words/questions to satisfy counts.
-- The current source contains 720 word entries but only 687 unique words, and the audit found 220 entries without matching files in `public/audio/`. The app currently relies on speech fallback for missing audio. Preserve that distinction and do not claim full uniqueness or full local-audio coverage without fixing and testing the data/assets.
+- The current source contains 720 unique word entries. The audit found 253 entries without matching files in `public/audio/`; the app relies on speech fallback for those words. Preserve that distinction and do not claim full local-audio coverage without fixing and testing the assets.
 - Use the injected RNG in `src/utils/shuffle.ts` for deterministic tests; do not introduce uncontrolled randomness into behavior that needs regression coverage.
 
 ## Persistence, database, and external services
@@ -63,7 +63,7 @@ Run the relevant checks and report their actual results:
 3. `git diff --check`
 4. For meaningful UI changes, exercise the rendered flow in a browser and check responsive layout, interaction, accessibility, loading/error states, and browser console warnings/errors.
 
-The repository currently has no lint script, coverage configuration, Playwright dependency/configuration, or GitHub Actions workflow. Never claim those checks passed. The intended clean install is `npm ci`, but the current `package-lock.json` is out of sync with `package.json` (`npm ci` currently fails on `@emnapi` entries); repair the lockfile in a focused dependency-maintenance change before treating clean installation as reproducible. `npm install --package-lock=false` is only a diagnostic workaround and must not be documented as the normal setup.
+The repository has lint, Playwright browser-smoke, and GitHub Actions configuration. Coverage thresholds are not configured, so never claim coverage checks passed. The reproducible install is `npm ci`; keep `package-lock.json` synchronized with `package.json` and do not use `npm install --package-lock=false` as normal setup.
 
 When behavior changes, add or update a regression test. Inspect the final diff and call out checks that could not run and the residual risk. For substantial changes, perform or request an independent review focused on correctness, regressions, security, data integrity, unnecessary complexity, and acceptance-criteria coverage.
 

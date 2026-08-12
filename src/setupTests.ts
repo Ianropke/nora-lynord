@@ -20,8 +20,8 @@ class MockAudioContext {
   }
   destination = {};
 }
-(window as any).AudioContext = MockAudioContext;
-(window as any).webkitAudioContext = MockAudioContext;
+Object.defineProperty(window, 'AudioContext', { value: MockAudioContext });
+Object.defineProperty(window, 'webkitAudioContext', { value: MockAudioContext });
 
 // Mock HTMLAudioElement
 window.HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue(undefined);
@@ -38,19 +38,20 @@ const mockSpeechSynthesis = {
   cancel: vi.fn(),
   getVoices: vi.fn().mockReturnValue([{ lang: 'da-DK', name: 'Danish' }]),
 };
-(window as any).speechSynthesis = mockSpeechSynthesis;
-(window as any).SpeechSynthesisUtterance = class {
+class MockSpeechSynthesisUtterance {
   text: string;
   lang: string = '';
   rate: number = 1;
   pitch: number = 1;
-  voice: any = null;
-  onend: any = null;
-  onerror: any = null;
+  voice: SpeechSynthesisVoice | null = null;
+  onend: ((event: Event) => void) | null = null;
+  onerror: ((event: Event) => void) | null = null;
   constructor(text: string) {
     this.text = text;
   }
-};
+}
+Object.defineProperty(window, 'speechSynthesis', { value: mockSpeechSynthesis });
+Object.defineProperty(window, 'SpeechSynthesisUtterance', { value: MockSpeechSynthesisUtterance });
 
 afterEach(() => {
   vi.clearAllMocks();

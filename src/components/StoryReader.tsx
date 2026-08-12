@@ -38,7 +38,7 @@ export function StoryReader({ storyId, onBack, onComplete, isCompletedBefore }: 
     const tokens = text.split(" ");
     return tokens.map((token, idx) => {
       // Extract punctuation to keep correct formatting
-      const match = token.match(/^([.,\/#!$%\^&\*;:{}=\-_`~()?"'–]*)(.*?)([.,\/#!$%\^&\*;:{}=\-_`~()?"'–]*)$/);
+      const match = token.match(/^([.,/#!$%&*;:{}=_`~()?"'–-]*)(.*?)([.,/#!$%&*;:{}=_`~()?"'–-]*)$/);
       if (!match) return <span key={idx}>{token} </span>;
 
       const leading = match[1];
