@@ -4,7 +4,7 @@ Dette dokument samler de vigtigste erfaringer, læringer og tekniske principper 
 
 ---
 
-## 📌 Top 5 Kerne-Læringer
+## 📌 Top 6 Kerne-Læringer
 
 ### 1. Børnevenlig UX & Fejltolerant Gamification
 - **Principper:** Ingen game-over, ingen mistede hjerter eller tidsstraf.
@@ -25,9 +25,14 @@ Dette dokument samler de vigtigste erfaringer, læringer og tekniske principper 
 - Hvert niveau har synlige flag-tags (`🇩🇰 0. - 1. klasse`, `🇮🇳 Class 1 (Grade 1)`), som hjælper forældre og lærere med at vælge det rette niveau for barnet.
 
 ### 5. Datakvalitet & Robusthed
-- **100% Unikke Ord:** Alle 480 ord i Ord-trænerens 4 ruter er saniteret, så der ikke optræder dubletter på tværs af ruterne.
+- **100% Unikke Ord:** Alle 720 ord i Ord-trænerens 6 levels og 72 ruter er unikke. `src/data/words.test.ts` beskytter route-strukturen og unikheden.
+- **Audio-proveniens:** 253 ord mangler lokal MP3 og bruger eksplicit dansk SpeechSynthesis-fallback; manglende assets må ikke erstattes med fabrikerede eller ikke-danske filer.
 - **localStorage Protection:** Skriveoperationer til `localStorage` er pakket i `try...catch` for at forhindre app-krasch ved `QuotaExceededError`.
 - **Forældre-Nulstilling:** Indbygget diskret `resetProgress()` i Præmieskabet med bekræftelsesdialog (`window.confirm`).
+
+### 6. Reproducerbar kvalitetssikring
+- `npm ci`, `npm run lint`, `npm run test:run`, `npm run test:e2e` og `npm run build` er de fælles CI-gates.
+- Browser-smoketests skal kontrollere både rendering, navigation og konsolfejl; en succesfuld TypeScript-build er ikke alene UI-validering.
 
 ---
 

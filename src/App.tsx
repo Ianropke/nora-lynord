@@ -847,13 +847,19 @@ export default function App() {
       if (!initialized.current) {
         initialized.current = true;
         try {
-          const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+          const AudioContextConstructor =
+            window.AudioContext ??
+            (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+          if (!AudioContextConstructor) return;
+          const ctx = new AudioContextConstructor();
           const buf = ctx.createBuffer(1, 1, 22050);
           const src = ctx.createBufferSource();
           src.buffer = buf;
           src.connect(ctx.destination);
           src.start(0);
-        } catch {}
+        } catch (error) {
+          console.debug("Audio context unlock unavailable", error);
+        }
         if ("speechSynthesis" in window) {
           window.speechSynthesis.getVoices();
         }

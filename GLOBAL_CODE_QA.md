@@ -4,7 +4,7 @@
 > **Målgruppe:** Nora (2. klasse / 7-8 år)  
 > **Tech Stack:** React 19, TypeScript, Vite, TailwindCSS v4, Lucide React, Canvas Confetti, Web Speech API, Web Audio API, Vitest, Playwright.
 
-Dette dokument samler alle nøglelæringer, arkitektoniske valg, pædagogiske principper, UX-erfaringer, læreplans-mapping og fejlløsninger fra hele udviklingsforløbet.
+Dette dokument samler nøglelæringer, arkitektoniske valg, pædagogiske principper, UX-erfaringer, læreplans-mapping og fejlløsninger fra udviklingsforløbet. Kildekode og automatiserede tests er den aktuelle sandhed, hvis dette historiske dokument afviger.
 
 ---
 
@@ -61,7 +61,7 @@ Dette dokument samler alle nøglelæringer, arkitektoniske valg, pædagogiske pr
   - Stort konfetti-show, trofæ-animationer og `+10 ⭐` udløses ved 100% korrekt gennemførelse.
 
 ### 2.2 Læreplans-mapping (🇩🇰 Danske Fælles Mål vs. 🇮🇳 Indisk CBSE/ICSE)
-Matematik- og Læsemodulerne er opdelt i 8 progressionsniveauer, der matcher både det danske og det indiske skolesystem:
+Regnemodulet er opdelt i 8 progressionsniveauer, mens Ord-træneren aktuelt har 6 levels. Læsehjørnet har 12 forfatterede historier i de regioner, der aktuelt har story-data. Mappingen matcher både det danske og det indiske skolesystem:
 
 | Level & Region | Indhold | 🇩🇰 Dansk Skoleklasse | 🇮🇳 Indisk Klasse |
 | :--- | :--- | :--- | :--- |
@@ -81,9 +81,10 @@ Matematik- og Læsemodulerne er opdelt i 8 progressionsniveauer, der matcher bå
 ### 3.1 PWA & Favicon Håndtering
 - **PWA Webmanifest (`public/manifest.webmanifest`):** Definerer appens navn (*Noras Lynord*), display (`standalone`), baggrundsfarve (`#111827`) og tema (`#6366f1`).
 - **Apple Touch Icon:** `<link rel="apple-touch-icon" href="/favicon.svg">` i `index.html` sikrer et flot ikon ved *"Føj til hjemmeskærm"* på iPad/iPhone.
+- **Offline-status:** Webmanifestet er på plads, men der er endnu ingen service worker eller offline-cache. Offline-understøttelse må derfor ikke beskrives som implementeret.
 
 ### 3.2 Touch-Optimering & Unikke Ord
-- **100% Unikke Ord (480 Ord):** Datamodellen `words.ts` indeholder præcis 480 unikke danske ord fordelt på 4 ruter af 120 ord. Alle historiske dubletter er elimineret.
+- **100% Unikke Ord (720 Ord):** Datamodellen `words.ts` indeholder 720 unikke danske ord fordelt på 6 levels og 72 ruter med 10 ord pr. rute. `src/data/words.test.ts` beskytter counts, route IDs og unikhed.
 
 ---
 
@@ -111,7 +112,9 @@ Matematik- og Læsemodulerne er opdelt i 8 progressionsniveauer, der matcher bå
       utterance.lang = "da-DK";
       utterance.rate = 0.85;
       window.speechSynthesis.speak(utterance);
-    } catch {}
+    } catch (error) {
+      console.debug("Math speech unavailable", error);
+    }
   }
   ```
 
@@ -119,8 +122,9 @@ Matematik- og Læsemodulerne er opdelt i 8 progressionsniveauer, der matcher bå
 
 ## 5. 🧪 Test-Disciplin, Kvalitetssikring & Deployment
 
-### 5.1 Playwright End-to-End Visual QA
-- **Automatiserede Skærmbilleder:** Playwright E2E-scriptet afvikler hele brugerrejsen på en tablet-viewport (768x1024) og verificerer alle 4 moduler, 8 math levels og gangetabellerne.
+### 5.1 Playwright End-to-End Browser QA
+- `e2e/home.spec.ts` verificerer, at forsiden renderer, level 6 kan nås på smal viewport, route 1 åbner korrekt, og der ikke kommer browserkonsolfejl.
+- CI kører Chromium-smoketesten via `npm run test:e2e`. Det er en smoke-suite, ikke en fuld visuel baseline-suite.
 
 ---
 
@@ -130,8 +134,9 @@ Matematik- og Læsemodulerne er opdelt i 8 progressionsniveauer, der matcher bå
 | :--- | :--- | :--- |
 | **Ødelagt Favicon** | `index.html` pegede på ueksisterende `/vite.svg`. | Rettet til `/favicon.svg` og tilføjet `apple-touch-icon`. |
 | **Manglende PWA Manifest** | Ingen `.webmanifest` fil til stede. | Oprettet `public/manifest.webmanifest` og linket i `index.html`. |
-| **Meta Description Mismatch** | Beskrivelsen nævnte 120 ord i stedet for 480 ord. | Opdateret beskrivelsen til 480 danske ord. |
-| **11 Dublerede ord i `words.ts`** | Samme ord optrådte i to ruter. | Saniteret `words.ts` så alle 480 ord er 100% unikke. |
+| **Meta Description Mismatch** | Beskrivelsen fulgte ikke den aktuelle vocabulary-count. | Opdateret til 720 danske ord. |
+| **Dublerede ord i `words.ts`** | Samme ord optrådte i flere ruter efter level-udvidelser. | De 33 senere dubletter er erstattet, og `src/data/words.test.ts` håndhæver 720 unikke ord. |
+| **Manglende lokale lydfiler** | Ikke alle nye level-ord har statiske MP3-filer. | `useAudio.ts` bruger dansk SpeechSynthesis-fallback; manglende assets er dokumenteret og må ikke maskeres. |
 | **Ubenyttet `resetProgress`** | Hooket havde `resetProgress` uden UI-knap. | Tilføjet diskret forældreknap i `TrophyCabinet.tsx` m. `window.confirm`. |
 | **Level 3 (Hoenn) fastlåst i Matematik** | `isRegionUnlocked` tjekkede kun hovedspillets rute-lås. | Ombygget `isRegionUnlocked` til også at tjekke fuldførte opgaver i samme modul. |
 

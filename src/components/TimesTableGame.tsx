@@ -15,7 +15,9 @@ function speakQuestion(text: string) {
     utterance.lang = "da-DK";
     utterance.rate = 0.85;
     window.speechSynthesis.speak(utterance);
-  } catch {}
+  } catch (error) {
+    console.debug("Times-table speech unavailable", error);
+  }
 }
 
 function Pokeball({ className = "", size = 24 }: { className?: string; size?: number }) {
@@ -63,7 +65,7 @@ export function TimesTableGame({ tableId, mode, onBack, onComplete }: TimesTable
       
       // Generate wrong answers
       while (opts.size < 4) {
-        let wrongAns = 0;
+        let wrongAns: number;
         
         if (mode === "count") {
           // For skip counting, distractors must be other multiples of tableId

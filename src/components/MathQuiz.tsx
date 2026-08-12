@@ -17,7 +17,9 @@ function speakMath(text: string) {
     utterance.lang = "da-DK";
     utterance.rate = 0.85;
     window.speechSynthesis.speak(utterance);
-  } catch {}
+  } catch (error) {
+    console.debug("Math speech unavailable", error);
+  }
 }
 
 // Use an SVG Pokeball for the final screen
